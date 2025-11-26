@@ -5,6 +5,12 @@ import { Temporal } from '@js-temporal/polyfill'
 // Implement with most naive implementation then refactor
 // something very similar to: https://github.com/dhis2/analytics/blob/master/src/components/PeriodDimension/utils/relativePeriods.js#L328
 
+
+/*
+* @nnkogift will work on DAILY,MONTHLY,WEEKLY,
+* @PSummit will work on QUARTERLY, YEARLY
+* */
+
 beforeEach(() => {
     // 25 November 2025
     jest.spyOn(Date, 'now').mockReturnValue(1764069336553)
