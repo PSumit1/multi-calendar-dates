@@ -6,7 +6,7 @@ import { Temporal } from '@js-temporal/polyfill'
 type GenerateFixedPeriods = (options: {
     // year: number
     periodType: PeriodType
-    startingDate?: string
+    referenceDate?: string
     // calendar: SupportedCalendar
     // locale?: string
     // startingDay?: number /** 1 is Monday */
@@ -45,16 +45,20 @@ const getMonthsPeriodType = () => [
 ]
 
 const generateRelativePeriods: GenerateFixedPeriods = ({
-    periodType,
-    startingDate // string or Temporal?
-}) => {
-    
-    const date = startingDate ? Temporal.PlainDate.from(startingDate) : getNowInCalendar()
+                                                           periodType,
+                                                           referenceDate // string or Temporal?
+                                                       }) => {
+
+    const date = referenceDate ? Temporal.PlainDate.from(referenceDate) : getNowInCalendar()
 
     if(periodType === "MONTHLY") {
         const result = getMonthsPeriodType().map(periodTypeConfig => {
-            const endDate = date.add({months: periodTypeConfig.offset})
-            const startDate = date.add({months: periodTypeConfig.offset - periodTypeConfig.duration})
+            const endDate = date.add({months: periodTypeConfig.offset}).with({day: 31});
+            const startDate = date.add({months: periodTypeConfig.offset}).with({day: 1})
+            console.log({
+                endDate: endDate.toString(),
+                startDate: startDate.toString()
+            })
             return {
                 ...periodTypeConfig,
                 periodType: "MONTHLY" as const,
