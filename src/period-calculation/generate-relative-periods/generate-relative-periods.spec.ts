@@ -73,6 +73,19 @@ describe('MONTHLY relative periods', () => {
             })
         }
     })
+    it(`should generate 3 months for the period last 3 months`, () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_3_MONTHS'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(
+                Temporal.PlainDate.from(selectedPeriod.startDate).since(
+                    Temporal.PlainDate.from(selectedPeriod.endDate)
+                )
+            ).toEqual(Temporal.Duration.from({ months: 3 }))
+        }
+    })
     it(`should generate correct period for the period last 6 months`, () => {
         const selectedPeriod = periods.find(
             (period) => period.id === 'LAST_6_MONTHS'
@@ -85,6 +98,19 @@ describe('MONTHLY relative periods', () => {
                 startDate: '2025-05-01',
                 endDate: '2025-10-31',
             })
+        }
+    })
+    it(`should generate 6 months for the period last 6 months`, () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_6_MONTHS'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(
+                Temporal.PlainDate.from(selectedPeriod.startDate).since(
+                    Temporal.PlainDate.from(selectedPeriod.endDate)
+                )
+            ).toEqual(Temporal.Duration.from({ months: 6 }))
         }
     })
     it(`should generate correct period for the period last 12 months`, () => {
@@ -101,6 +127,19 @@ describe('MONTHLY relative periods', () => {
             })
         }
     })
+    it(`should generate 12 months for the period last 12 months`, () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_12_MONTHS'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(
+                Temporal.PlainDate.from(selectedPeriod.startDate).since(
+                    Temporal.PlainDate.from(selectedPeriod.endDate)
+                )
+            ).toEqual(Temporal.Duration.from({ months: 12 }))
+        }
+    })
     it(`should generate correct period for the period months this year`, () => {
         const selectedPeriod = periods.find(
             (period) => period.id === 'LAST_12_MONTHS'
@@ -113,6 +152,19 @@ describe('MONTHLY relative periods', () => {
                 startDate: '2025-01-01',
                 endDate: '2025-12-31',
             })
+        }
+    })
+    it(`should generate 12 months for the period months this year`, () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_12_MONTHS'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(
+                Temporal.PlainDate.from(selectedPeriod.startDate).since(
+                    Temporal.PlainDate.from(selectedPeriod.endDate)
+                )
+            ).toEqual(Temporal.Duration.from({ months: 12 }))
         }
     })
 })
