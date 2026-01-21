@@ -1269,283 +1269,288 @@ describe('DAILY  relative periods', () => {
     })
 })
 
-//
-// describe('QUARTERLY relative periods', () => {
-//     const periods = generateRelativePeriods({ periodType: 'QUARTERLY' })
-//
-//     it('should generate correct number of periods', () => {
-//         // From constants: THIS_QUARTER, LAST_QUARTER, LAST_4_QUARTERS, QUARTERS_THIS_YEAR
-//         expect(periods.length).toEqual(4)
-//     })
-//
-//     it('should generate correct period for the period this quarter', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'THIS_QUARTER'
-//         )
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'QUARTERLY',
-//                 id: 'THIS_QUARTER',
-//                 displayName: 'This quarter',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'QUARTERLY',
-//                         id: '2025Q4',
-//                         iso: '2025Q4',
-//                         name: 'October - December 2025',
-//                         displayName: 'October - December 2025',
-//                         startDate: '2025-10-01',
-//                         endDate: '2025-12-31',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//
-//     it('should generate correct period for the period last quarter', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_QUARTER'
-//         )
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'QUARTERLY',
-//                 id: 'LAST_QUARTER',
-//                 displayName: 'Last quarter',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'QUARTERLY',
-//                         id: '2025Q3',
-//                         iso: '2025Q3',
-//                         name: 'July - September 2025',
-//                         displayName: 'July - September 2025',
-//                         startDate: '2025-07-01',
-//                         endDate: '2025-09-30',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//
-//     describe('periods for the period last 4 quarters', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_4_QUARTERS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 4 quarters', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'QUARTERLY',
-//                     id: 'LAST_4_QUARTERS',
-//                     displayName: 'Last 4 quarters',
-//                 })
-//                 const expected = [
-//                     {
-//                         periodType: 'QUARTERLY',
-//                         id: '2024Q4',
-//                         iso: '2024Q4',
-//                         name: 'October - December 2024',
-//                         displayName: 'October - December 2024',
-//                         startDate: '2024-10-01',
-//                         endDate: '2024-12-31',
-//                     },
-//                     {
-//                         periodType: 'QUARTERLY',
-//                         id: '2025Q1',
-//                         iso: '2025Q1',
-//                         name: 'January - March 2025',
-//                         displayName: 'January - March 2025',
-//                         startDate: '2025-01-01',
-//                         endDate: '2025-03-31',
-//                     },
-//                     {
-//                         periodType: 'QUARTERLY',
-//                         id: '2025Q2',
-//                         iso: '2025Q2',
-//                         name: 'April - June 2025',
-//                         displayName: 'April - June 2025',
-//                         startDate: '2025-04-01',
-//                         endDate: '2025-06-30',
-//                     },
-//                     {
-//                         periodType: 'QUARTERLY',
-//                         id: '2025Q3',
-//                         iso: '2025Q3',
-//                         name: 'July - September 2025',
-//                         displayName: 'July - September 2025',
-//                         startDate: '2025-07-01',
-//                         endDate: '2025-09-30',
-//                     },
-//                 ]
-//                 expect(selectedPeriod.fixedPeriods).toEqual(expected)
-//             }
-//         })
-//     })
-//
-//     describe('periods for quarters this year', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'QUARTERS_THIS_YEAR'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 4 quarters', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'QUARTERLY',
-//                     id: 'QUARTERS_THIS_YEAR',
-//                     displayName: 'Quarters this year',
-//                 })
-//                 const expected = [
-//                     {
-//                         periodType: 'QUARTERLY',
-//                         id: '2025Q1',
-//                         iso: '2025Q1',
-//                         name: 'January - March 2025',
-//                         displayName: 'January - March 2025',
-//                         startDate: '2025-01-01',
-//                         endDate: '2025-03-31',
-//                     },
-//                     {
-//                         periodType: 'QUARTERLY',
-//                         id: '2025Q2',
-//                         iso: '2025Q2',
-//                         name: 'April - June 2025',
-//                         displayName: 'April - June 2025',
-//                         startDate: '2025-04-01',
-//                         endDate: '2025-06-30',
-//                     },
-//                     {
-//                         periodType: 'QUARTERLY',
-//                         id: '2025Q3',
-//                         iso: '2025Q3',
-//                         name: 'July - September 2025',
-//                         displayName: 'July - September 2025',
-//                         startDate: '2025-07-01',
-//                         endDate: '2025-09-30',
-//                     },
-//                     {
-//                         periodType: 'QUARTERLY',
-//                         id: '2025Q4',
-//                         iso: '2025Q4',
-//                         name: 'October - December 2025',
-//                         displayName: 'October - December 2025',
-//                         startDate: '2025-10-01',
-//                         endDate: '2025-12-31',
-//                     },
-//                 ]
-//                 expect(selectedPeriod.fixedPeriods).toEqual(expected)
-//             }
-//         })
-//     })
-// })
-//
-// describe('SIXMONTHLY relative periods', () => {
-//     const periods = generateRelativePeriods({ periodType: 'SIXMONTHLY' })
-//
-//     it('should generate correct number of periods', () => {
-//         // From constants: THIS_SIX_MONTH, LAST_SIX_MONTH, LAST_2_SIXMONTHS
-//         expect(periods.length).toEqual(3)
-//     })
-//
-//     it('should generate correct period for the period this six-month', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'THIS_SIX_MONTH'
-//         )
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'SIXMONTHLY',
-//                 id: 'THIS_SIX_MONTH',
-//                 displayName: 'This six-month',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'SIXMONTHLY',
-//                         id: '2025S2',
-//                         iso: '2025S2',
-//                         name: 'July - December 2025',
-//                         displayName: 'July - December 2025',
-//                         startDate: '2025-07-01',
-//                         endDate: '2025-12-31',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//
-//     it('should generate correct period for the period last six-month', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_SIX_MONTH'
-//         )
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'SIXMONTHLY',
-//                 id: 'LAST_SIX_MONTH',
-//                 displayName: 'Last six-month',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'SIXMONTHLY',
-//                         id: '2025S1',
-//                         iso: '2025S1',
-//                         name: 'January - June 2025',
-//                         displayName: 'January - June 2025',
-//                         startDate: '2025-01-01',
-//                         endDate: '2025-06-30',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//
-//     describe('periods for the period last 2 six-month', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_2_SIXMONTHS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 2 six-months', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(2)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'SIXMONTHLY',
-//                     id: 'LAST_2_SIXMONTHS',
-//                     displayName: 'Last 2 six-month',
-//                 })
-//                 const expected = [
-//                     {
-//                         periodType: 'SIXMONTHLY',
-//                         id: '2024S2',
-//                         iso: '2024S2',
-//                         name: 'July - December 2024',
-//                         displayName: 'July - December 2024',
-//                         startDate: '2024-07-01',
-//                         endDate: '2024-12-31',
-//                     },
-//                     {
-//                         periodType: 'SIXMONTHLY',
-//                         id: '2025S1',
-//                         iso: '2025S1',
-//                         name: 'January - June 2025',
-//                         displayName: 'January - June 2025',
-//                         startDate: '2025-01-01',
-//                         endDate: '2025-06-30',
-//                     },
-//                 ]
-//                 expect(selectedPeriod.fixedPeriods).toEqual(expected)
-//             }
-//         })
-//     })
-// })
+describe('QUARTERLY relative periods', () => {
+    const periods = generateRelativePeriods({
+        periodType: 'QUARTERLY',
+        referenceDate: referenceDate.toString(),
+    })
+
+    it('should generate correct number of periods', () => {
+        // From constants: THIS_QUARTER, LAST_QUARTER, LAST_4_QUARTERS, QUARTERS_THIS_YEAR
+        expect(periods.length).toEqual(4)
+    })
+
+    it('should generate correct period for the period this quarter', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'THIS_QUARTER'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'QUARTERLY',
+                id: 'THIS_QUARTER',
+                displayName: 'This quarter',
+                fixedPeriods: [
+                    {
+                        periodType: 'QUARTERLY',
+                        id: '2025Q4',
+                        iso: '2025Q4',
+                        name: 'October - December 2025',
+                        displayName: 'October - December 2025',
+                        startDate: '2025-10-01',
+                        endDate: '2025-12-31',
+                    },
+                ],
+            })
+        }
+    })
+
+    it('should generate correct period for the period last quarter', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_QUARTER'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'QUARTERLY',
+                id: 'LAST_QUARTER',
+                displayName: 'Last quarter',
+                fixedPeriods: [
+                    {
+                        periodType: 'QUARTERLY',
+                        id: '2025Q3',
+                        iso: '2025Q3',
+                        name: 'July - September 2025',
+                        displayName: 'July - September 2025',
+                        startDate: '2025-07-01',
+                        endDate: '2025-09-30',
+                    },
+                ],
+            })
+        }
+    })
+
+    describe('periods for the period last 4 quarters', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_4_QUARTERS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 4 quarters', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'QUARTERLY',
+                    id: 'LAST_4_QUARTERS',
+                    displayName: 'Last 4 quarters',
+                })
+                const expected = [
+                    {
+                        periodType: 'QUARTERLY',
+                        id: '2024Q4',
+                        iso: '2024Q4',
+                        name: 'October - December 2024',
+                        displayName: 'October - December 2024',
+                        startDate: '2024-10-01',
+                        endDate: '2024-12-31',
+                    },
+                    {
+                        periodType: 'QUARTERLY',
+                        id: '2025Q1',
+                        iso: '2025Q1',
+                        name: 'January - March 2025',
+                        displayName: 'January - March 2025',
+                        startDate: '2025-01-01',
+                        endDate: '2025-03-31',
+                    },
+                    {
+                        periodType: 'QUARTERLY',
+                        id: '2025Q2',
+                        iso: '2025Q2',
+                        name: 'April - June 2025',
+                        displayName: 'April - June 2025',
+                        startDate: '2025-04-01',
+                        endDate: '2025-06-30',
+                    },
+                    {
+                        periodType: 'QUARTERLY',
+                        id: '2025Q3',
+                        iso: '2025Q3',
+                        name: 'July - September 2025',
+                        displayName: 'July - September 2025',
+                        startDate: '2025-07-01',
+                        endDate: '2025-09-30',
+                    },
+                ]
+                expect(selectedPeriod.fixedPeriods).toEqual(expected)
+            }
+        })
+    })
+
+    describe('periods for quarters this year', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'QUARTERS_THIS_YEAR'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 4 quarters', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'QUARTERLY',
+                    id: 'QUARTERS_THIS_YEAR',
+                    displayName: 'Quarters this year',
+                })
+                const expected = [
+                    {
+                        periodType: 'QUARTERLY',
+                        id: '2025Q1',
+                        iso: '2025Q1',
+                        name: 'January - March 2025',
+                        displayName: 'January - March 2025',
+                        startDate: '2025-01-01',
+                        endDate: '2025-03-31',
+                    },
+                    {
+                        periodType: 'QUARTERLY',
+                        id: '2025Q2',
+                        iso: '2025Q2',
+                        name: 'April - June 2025',
+                        displayName: 'April - June 2025',
+                        startDate: '2025-04-01',
+                        endDate: '2025-06-30',
+                    },
+                    {
+                        periodType: 'QUARTERLY',
+                        id: '2025Q3',
+                        iso: '2025Q3',
+                        name: 'July - September 2025',
+                        displayName: 'July - September 2025',
+                        startDate: '2025-07-01',
+                        endDate: '2025-09-30',
+                    },
+                    {
+                        periodType: 'QUARTERLY',
+                        id: '2025Q4',
+                        iso: '2025Q4',
+                        name: 'October - December 2025',
+                        displayName: 'October - December 2025',
+                        startDate: '2025-10-01',
+                        endDate: '2025-12-31',
+                    },
+                ]
+                expect(selectedPeriod.fixedPeriods).toEqual(expected)
+            }
+        })
+    })
+})
+
+describe('SIXMONTHLY relative periods', () => {
+    const periods = generateRelativePeriods({
+        periodType: 'SIXMONTHLY',
+        referenceDate: referenceDate.toString(),
+    })
+
+    it('should generate correct number of periods', () => {
+        // From constants: THIS_SIX_MONTH, LAST_SIX_MONTH, LAST_2_SIXMONTHS
+        expect(periods.length).toEqual(3)
+    })
+
+    it('should generate correct period for the period this six-month', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'THIS_SIX_MONTH'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'SIXMONTHLY',
+                id: 'THIS_SIX_MONTH',
+                displayName: 'This six-month',
+                fixedPeriods: [
+                    {
+                        periodType: 'SIXMONTHLY',
+                        id: '2025S2',
+                        iso: '2025S2',
+                        name: 'July - December 2025',
+                        displayName: 'July - December 2025',
+                        startDate: '2025-07-01',
+                        endDate: '2025-12-31',
+                    },
+                ],
+            })
+        }
+    })
+
+    it('should generate correct period for the period last six-month', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_SIX_MONTH'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'SIXMONTHLY',
+                id: 'LAST_SIX_MONTH',
+                displayName: 'Last six-month',
+                fixedPeriods: [
+                    {
+                        periodType: 'SIXMONTHLY',
+                        id: '2025S1',
+                        iso: '2025S1',
+                        name: 'January - June 2025',
+                        displayName: 'January - June 2025',
+                        startDate: '2025-01-01',
+                        endDate: '2025-06-30',
+                    },
+                ],
+            })
+        }
+    })
+
+    describe('periods for the period last 2 six-month', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_2_SIXMONTHS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 2 six-months', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(2)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'SIXMONTHLY',
+                    id: 'LAST_2_SIXMONTHS',
+                    displayName: 'Last 2 six-month',
+                })
+                const expected = [
+                    {
+                        periodType: 'SIXMONTHLY',
+                        id: '2024S2',
+                        iso: '2024S2',
+                        name: 'July - December 2024',
+                        displayName: 'July - December 2024',
+                        startDate: '2024-07-01',
+                        endDate: '2024-12-31',
+                    },
+                    {
+                        periodType: 'SIXMONTHLY',
+                        id: '2025S1',
+                        iso: '2025S1',
+                        name: 'January - June 2025',
+                        displayName: 'January - June 2025',
+                        startDate: '2025-01-01',
+                        endDate: '2025-06-30',
+                    },
+                ]
+                expect(selectedPeriod.fixedPeriods).toEqual(expected)
+            }
+        })
+    })
+})

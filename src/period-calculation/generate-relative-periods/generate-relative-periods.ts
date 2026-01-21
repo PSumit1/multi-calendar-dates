@@ -8,6 +8,8 @@ import {
     getBiWeeksPeriodType,
     getDaysPeriodType,
     getMonthsPeriodType,
+    getQuartersPeriodType,
+    getSixMonthsPeriodType,
     getWeeksPeriodType,
 } from './constants'
 
@@ -305,6 +307,114 @@ const generateRelativePeriods: GenerateRelativePeriods = ({
                 name: periodTypeConfig.name,
                 id: periodTypeConfig.id,
                 periodType: 'DAILY' as const,
+                displayName: periodTypeConfig.name,
+                fixedPeriods,
+            }
+        })
+    }
+    if (periodType === 'QUARTERLY') {
+        return getQuartersPeriodType().map((periodTypeConfig) => {
+            const fixedPeriods: Array<FixedPeriod> = []
+            if (periodTypeConfig.thisYear) {
+                // We generate periods based on the type for the current year of the selected date
+                const startDate = date.with({
+                    day: 1,
+                    month: 1,
+                })
+                for (let item = 0; item < 4; item++) {
+                    const offsetDate = startDate
+                        .add({ months: item * 3 })
+                        .toPlainDateTime()
+                        .toPlainDate()
+                        .toString()
+                    fixedPeriods.push(
+                        getFixedPeriodByDate({
+                            periodType: 'QUARTERLY',
+                            date: offsetDate,
+                            calendar: calendar ?? 'gregory',
+                        })
+                    )
+                }
+            } else {
+                for (let item = 1; item <= periodTypeConfig.duration; item++) {
+                    const offsetDate = date
+                        .add({
+                            months: item * periodTypeConfig.offset * 3,
+                        })
+                        .toPlainDateTime()
+                        .toPlainDate()
+                        .toString()
+                    fixedPeriods.push(
+                        getFixedPeriodByDate({
+                            periodType: 'QUARTERLY',
+                            date: offsetDate,
+                            calendar: calendar ?? 'gregory',
+                        })
+                    )
+                }
+                // If the offset is negative, the order of the periods is reversed, we need to reverse the array again
+                if (periodTypeConfig.offset) {
+                    fixedPeriods.reverse()
+                }
+            }
+            return {
+                name: periodTypeConfig.name,
+                id: periodTypeConfig.id,
+                periodType: 'QUARTERLY' as const,
+                displayName: periodTypeConfig.name,
+                fixedPeriods,
+            }
+        })
+    }
+    if (periodType === 'SIXMONTHLY') {
+        return getSixMonthsPeriodType().map((periodTypeConfig) => {
+            const fixedPeriods: Array<FixedPeriod> = []
+            if (periodTypeConfig.thisYear) {
+                // We generate periods based on the type for the current year of the selected date
+                const startDate = date.with({
+                    day: 1,
+                    month: 1,
+                })
+                for (let item = 0; item < 2; item++) {
+                    const offsetDate = startDate
+                        .add({ months: item * 6 })
+                        .toPlainDateTime()
+                        .toPlainDate()
+                        .toString()
+                    fixedPeriods.push(
+                        getFixedPeriodByDate({
+                            periodType: 'SIXMONTHLY',
+                            date: offsetDate,
+                            calendar: calendar ?? 'gregory',
+                        })
+                    )
+                }
+            } else {
+                for (let item = 1; item <= periodTypeConfig.duration; item++) {
+                    const offsetDate = date
+                        .add({
+                            months: item * periodTypeConfig.offset * 6,
+                        })
+                        .toPlainDateTime()
+                        .toPlainDate()
+                        .toString()
+                    fixedPeriods.push(
+                        getFixedPeriodByDate({
+                            periodType: 'SIXMONTHLY',
+                            date: offsetDate,
+                            calendar: calendar ?? 'gregory',
+                        })
+                    )
+                }
+                // If the offset is negative, the order of the periods is reversed, we need to reverse the array again
+                if (periodTypeConfig.offset) {
+                    fixedPeriods.reverse()
+                }
+            }
+            return {
+                name: periodTypeConfig.name,
+                id: periodTypeConfig.id,
+                periodType: 'SIXMONTHLY' as const,
                 displayName: periodTypeConfig.name,
                 fixedPeriods,
             }

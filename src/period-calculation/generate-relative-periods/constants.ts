@@ -179,8 +179,7 @@ export const getQuartersPeriodType = (): Array<RelativePeriodTypeConfig> => [
     {
         id: 'QUARTERS_THIS_YEAR',
         name: i18n.t('Quarters this year'),
-        offset: 3,
-        duration: 4,
+        thisYear: true,
     },
 ]
 
