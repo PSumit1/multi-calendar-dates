@@ -12,4 +12,10 @@ export type FixedPeriod = {
     endDate: string
 }
 
-export type RelativePeriod = FixedPeriod
+export type RelativePeriod = {
+    periodType: PeriodType
+    name: string
+    displayName: string
+    id: string
+    fixedPeriods: Array<FixedPeriod>
+}

@@ -1,50 +1,93 @@
-import i18n from '@dhis2/d2-i18n'
 import { Temporal } from '@js-temporal/polyfill'
-import { formatDate, getNowInCalendar } from '../../utils'
-import { PeriodType, RelativePeriod } from '../types'
+import { SupportedCalendar } from '../../types'
+import { getNowInCalendar } from '../../utils'
+import { getFixedPeriodByDate } from '../get-fixed-period-by-date'
+import { FixedPeriod, PeriodType, RelativePeriod } from '../types'
 import { getMonthsPeriodType } from './constants'
 
-type GenerateFixedPeriods = (options: {
-    // year: number
+type GenerateRelativePeriods = (options: {
     periodType: PeriodType
     referenceDate?: string
-    // calendar: SupportedCalendar
-    // locale?: string
-    // startingDay?: number /** 1 is Monday */
-    // yearsCount?: number | null
-    // endsBefore?: string
+    calendar?: SupportedCalendar
 }) => Array<RelativePeriod>
 
-const generateRelativePeriods: GenerateFixedPeriods = ({
+const generateRelativePeriods: GenerateRelativePeriods = ({
     periodType,
     referenceDate, // string or Temporal?
+    calendar,
 }) => {
     const date = referenceDate
         ? Temporal.PlainDate.from(referenceDate)
-        : getNowInCalendar()
+        : getNowInCalendar(calendar)
 
     if (periodType === 'MONTHLY') {
-        const result = getMonthsPeriodType().map((periodTypeConfig) => {
-            const endDate = date
-                .add({ months: periodTypeConfig.offset })
-                .with({ day: 31 })
-            const startDate = date
-                .add({ months: periodTypeConfig.offset })
-                .with({ day: 1 })
+        return getMonthsPeriodType().map((periodTypeConfig) => {
+            const fixedPeriods: Array<FixedPeriod> = []
+            if (periodTypeConfig.thisYear) {
+                // We generate periods based on the type for the current year of the selected date
+                const startDate = date.with({
+                    day: 1,
+                    month: 1,
+                })
+                for (let offset = 0; offset < 12; offset++) {
+                    fixedPeriods.push(
+                        getFixedPeriodByDate({
+                            periodType: 'MONTHLY',
+                            date: startDate
+                                .add({
+                                    months: offset,
+                                })
+                                .toString(),
+                            calendar: calendar ?? 'gregory',
+                        })
+                    )
+                }
+            } else {
+                for (let item = 1; item <= periodTypeConfig.duration; item++) {
+                    fixedPeriods.push(
+                        getFixedPeriodByDate({
+                            periodType: 'MONTHLY',
+                            date: date
+                                .add({
+                                    months: item * periodTypeConfig.offset,
+                                })
+                                .toString(),
+                            calendar: calendar ?? 'gregory',
+                        })
+                    )
+                }
+                // If the offset is negative, the order of the periods is reversed, we need to reverse the array again
+                if (periodTypeConfig.offset) {
+                    fixedPeriods.reverse()
+                }
+            }
             return {
-                ...periodTypeConfig,
+                name: periodTypeConfig.name,
+                id: periodTypeConfig.id,
                 periodType: 'MONTHLY' as const,
                 displayName: periodTypeConfig.name,
-                startDate: formatDate(startDate),
-                endDate: formatDate(endDate),
+                fixedPeriods,
             }
         })
-        return result
     }
 
-    // do same for other period types
+    if (periodType === 'DAILY') {
+        return []
+    }
 
-    throw 'not implemented'
+    if (periodType === 'WEEKLY') {
+        return []
+    }
+
+    if (periodType === 'BIWEEKLY') {
+        return []
+    }
+
+    if (periodType === 'BIMONTHLY') {
+        return []
+    }
+
+    return []
 }
 
 export default generateRelativePeriods

@@ -1,6 +1,27 @@
 import i18n from '@dhis2/d2-i18n'
 
-export const getMonthsPeriodType = () => [
+interface BaseRelativePeriodTypeConfig {
+    id: string
+    name: string
+}
+
+export interface ThisYearRelativePeriodTypeConfig
+    extends BaseRelativePeriodTypeConfig {
+    thisYear: true
+}
+
+export interface DurationRelativePeriodTypeConfig
+    extends BaseRelativePeriodTypeConfig {
+    thisYear?: false
+    offset: number
+    duration: number
+}
+
+export type RelativePeriodTypeConfig =
+    | ThisYearRelativePeriodTypeConfig
+    | DurationRelativePeriodTypeConfig
+
+export const getMonthsPeriodType = (): Array<RelativePeriodTypeConfig> => [
     { id: 'THIS_MONTH', name: i18n.t('This month'), offset: 0, duration: 1 },
     { id: 'LAST_MONTH', name: i18n.t('Last month'), offset: -1, duration: 1 },
     {
@@ -24,12 +45,11 @@ export const getMonthsPeriodType = () => [
     {
         id: 'MONTHS_THIS_YEAR',
         name: i18n.t('Months this year'),
-        offset: 11,
-        duration: 12,
+        thisYear: true,
     },
 ]
 
-export const getDaysPeriodType = () => [
+export const getDaysPeriodType = (): Array<RelativePeriodTypeConfig> => [
     { id: 'TODAY', name: i18n.t('Today'), offset: 0, duration: 1 },
     { id: 'YESTERDAY', name: i18n.t('Yesterday'), offset: -1, duration: 1 },
     { id: 'LAST_3_DAYS', name: i18n.t('Last 3 days'), offset: -1, duration: 3 },
@@ -66,7 +86,7 @@ export const getDaysPeriodType = () => [
     },
 ]
 
-export const getWeeksPeriodType = () => [
+export const getWeeksPeriodType = (): Array<RelativePeriodTypeConfig> => [
     { id: 'THIS_WEEK', name: i18n.t('This week'), offset: 0, duration: 1 },
     { id: 'LAST_WEEK', name: i18n.t('Last week'), offset: -1, duration: 1 },
     {
@@ -95,7 +115,7 @@ export const getWeeksPeriodType = () => [
     },
 ]
 
-export const getBiWeeksPeriodType = () => [
+export const getBiWeeksPeriodType = (): Array<RelativePeriodTypeConfig> => [
     { id: 'THIS_BIWEEK', name: i18n.t('This bi-week'), offset: 0, duration: 1 },
     {
         id: 'LAST_BIWEEK',
@@ -111,7 +131,7 @@ export const getBiWeeksPeriodType = () => [
     },
 ]
 
-export const getBiMonthsPeriodType = () => [
+export const getBiMonthsPeriodType = (): Array<RelativePeriodTypeConfig> => [
     {
         id: 'THIS_BIMONTH',
         name: i18n.t('This bi-month'),
@@ -138,7 +158,7 @@ export const getBiMonthsPeriodType = () => [
     },
 ]
 
-export const getQuartersPeriodType = () => [
+export const getQuartersPeriodType = (): Array<RelativePeriodTypeConfig> => [
     {
         id: 'THIS_QUARTER',
         name: i18n.t('This quarter'),
@@ -165,7 +185,7 @@ export const getQuartersPeriodType = () => [
     },
 ]
 
-export const getSixMonthsPeriodType = () => [
+export const getSixMonthsPeriodType = (): Array<RelativePeriodTypeConfig> => [
     {
         id: 'THIS_SIX_MONTH',
         name: i18n.t('This six-month'),
@@ -186,28 +206,29 @@ export const getSixMonthsPeriodType = () => [
     },
 ]
 
-export const getFinancialYearsPeriodType = () => [
-    {
-        id: 'THIS_FINANCIAL_YEAR',
-        name: i18n.t('This financial year'),
-        offset: 0,
-        duration: 1,
-    },
-    {
-        id: 'LAST_FINANCIAL_YEAR',
-        name: i18n.t('Last financial year'),
-        offset: -1,
-        duration: 1,
-    },
-    {
-        id: 'LAST_5_FINANCIAL_YEARS',
-        name: i18n.t('Last 5 financial years'),
-        offset: -1,
-        duration: 5,
-    },
-]
+export const getFinancialYearsPeriodType =
+    (): Array<RelativePeriodTypeConfig> => [
+        {
+            id: 'THIS_FINANCIAL_YEAR',
+            name: i18n.t('This financial year'),
+            offset: 0,
+            duration: 1,
+        },
+        {
+            id: 'LAST_FINANCIAL_YEAR',
+            name: i18n.t('Last financial year'),
+            offset: -1,
+            duration: 1,
+        },
+        {
+            id: 'LAST_5_FINANCIAL_YEARS',
+            name: i18n.t('Last 5 financial years'),
+            offset: -1,
+            duration: 5,
+        },
+    ]
 
-export const getYearsPeriodType = () => [
+export const getYearsPeriodType = (): Array<RelativePeriodTypeConfig> => [
     { id: 'THIS_YEAR', name: i18n.t('This year'), offset: 0, duration: 1 },
     { id: 'LAST_YEAR', name: i18n.t('Last year'), offset: -1, duration: 1 },
     {
