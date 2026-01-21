@@ -16,7 +16,7 @@ const referenceDate = Temporal.ZonedDateTime.from({
     timeZone: 'UTC',
 })
 beforeEach(() => {
-    // 25 November 2025
+    // November 25, 2025
     jest.fn(getNowInCalendar).mockReturnValue(referenceDate)
 })
 
@@ -915,460 +915,359 @@ describe('BIWEEKLY relative periods', () => {
     })
 })
 
-// describe('DAILY  relative periods', () => {
-//     const periods = generateRelativePeriods({
-//         periodType: 'DAILY',
-//     })
-//     it('should generate correct number of periods', () => {
-//         expect(periods.length).toEqual(7)
-//     })
-//     it(`should generate correct period for the period today`, () => {
-//         const selectedPeriod = periods.find((period) => period.id === 'TODAY')
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'DAILY',
-//                 id: 'TODAY',
-//                 displayName: 'Today',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'DAILY',
-//                         id: '20251125',
-//                         displayName: '25 November 2025',
-//                         startDate: '2025-11-25',
-//                         endDate: '2025-11-25',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//     it(`should generate correct period for the period yesterday`, () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'YESTERDAY'
-//         )
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'DAILY',
-//                 id: 'YESTERDAY',
-//                 displayName: 'Yesterday',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'DAILY',
-//                         id: '20251124',
-//                         displayName: '24 November 2025',
-//                         startDate: '2025-11-24',
-//                         endDate: '2025-11-24',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//     describe('periods for the period last 3 days', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_3_DAYS'
-//         )
-//         it(`should be defined`, () => expect(selectedPeriod).toBeDefined())
-//         it(`should generate 3 days period`, () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(3)
-//         })
-//         it(`should generate correct period`, () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'DAILY',
-//                     id: 'LAST_3_DAYS',
-//                     displayName: 'Last 3 Days',
-//                     fixedPeriods: [
-//                         {
-//                             periodType: 'DAILY',
-//                             id: '20251122',
-//                             displayName: '22 November 2025',
-//                             startDate: '2025-11-22',
-//                             endDate: '2025-11-22',
-//                         },
-//                         {
-//                             periodType: 'DAILY',
-//                             id: '20251123',
-//                             displayName: '23 November 2025',
-//                             startDate: '2025-11-23',
-//                             endDate: '2025-11-23',
-//                         },
-//                         {
-//                             periodType: 'DAILY',
-//                             id: '20251124',
-//                             displayName: '24 November 2025',
-//                             startDate: '2025-11-24',
-//                             endDate: '2025-11-24',
-//                         },
-//                     ],
-//                 })
-//             }
-//         })
-//     })
-//     describe('periods for the period last 7 days', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_7_DAYS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 7 days', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(7)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'DAILY',
-//                     id: 'LAST_7_DAYS',
-//                     displayName: 'Last 7 days',
-//                     fixedPeriods: [
-//                         {
-//                             periodType: 'DAILY',
-//                             id: '20251118',
-//                             displayName: '18 November 2025',
-//                             startDate: '2025-11-18',
-//                             endDate: '2025-11-18',
-//                         },
-//                         {
-//                             periodType: 'DAILY',
-//                             id: '20251119',
-//                             displayName: '19 November 2025',
-//                             startDate: '2025-11-19',
-//                             endDate: '2025-11-19',
-//                         },
-//                         {
-//                             periodType: 'DAILY',
-//                             id: '20251120',
-//                             displayName: '20 November 2025',
-//                             startDate: '2025-11-20',
-//                             endDate: '2025-11-20',
-//                         },
-//                         {
-//                             periodType: 'DAILY',
-//                             id: '20251121',
-//                             displayName: '21 November 2025',
-//                             startDate: '2025-11-21',
-//                             endDate: '2025-11-21',
-//                         },
-//                         {
-//                             periodType: 'DAILY',
-//                             id: '20251122',
-//                             displayName: '22 November 2025',
-//                             startDate: '2025-11-22',
-//                             endDate: '2025-11-22',
-//                         },
-//                         {
-//                             periodType: 'DAILY',
-//                             id: '20251123',
-//                             displayName: '23 November 2025',
-//                             startDate: '2025-11-23',
-//                             endDate: '2025-11-23',
-//                         },
-//                         {
-//                             periodType: 'DAILY',
-//                             id: '20251124',
-//                             displayName: '24 November 2025',
-//                             startDate: '2025-11-24',
-//                             endDate: '2025-11-24',
-//                         },
-//                     ],
-//                 })
-//             }
-//         })
-//     })
-//     describe('periods for the period last 14 days', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_14_DAYS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 14 days', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(14)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'DAILY',
-//                     id: 'LAST_14_DAYS',
-//                     displayName: 'Last 14 days',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods[0]).toEqual({
-//                     periodType: 'DAILY',
-//                     id: '20251111',
-//                     displayName: '11 November 2025',
-//                     startDate: '2025-11-11',
-//                     endDate: '2025-11-11',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods[13]).toEqual({
-//                     periodType: 'DAILY',
-//                     id: '20251124',
-//                     displayName: '24 November 2025',
-//                     startDate: '2025-11-24',
-//                     endDate: '2025-11-24',
-//                 })
-//             }
-//         })
-//     })
-//     describe('periods for the period last 30 days', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_30_DAYS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 30 days', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(30)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'DAILY',
-//                     id: 'LAST_30_DAYS',
-//                     displayName: 'Last 30 days',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods[0]).toEqual({
-//                     periodType: 'DAILY',
-//                     id: '20251027',
-//                     displayName: '27 October 2025',
-//                     startDate: '2025-10-27',
-//                     endDate: '2025-10-27',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods[29]).toEqual({
-//                     periodType: 'DAILY',
-//                     id: '20251124',
-//                     displayName: '24 November 2025',
-//                     startDate: '2025-11-24',
-//                     endDate: '2025-11-24',
-//                 })
-//             }
-//         })
-//     })
-//     describe('periods for the period last 60 days', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_60_DAYS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 60 days', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(60)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'DAILY',
-//                     id: 'LAST_60_DAYS',
-//                     displayName: 'Last 60 days',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods[0]).toEqual({
-//                     periodType: 'DAILY',
-//                     id: '20250926',
-//                     displayName: '26 September 2025',
-//                     startDate: '2025-09-26',
-//                     endDate: '2025-09-26',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods[59]).toEqual({
-//                     periodType: 'DAILY',
-//                     id: '20251124',
-//                     displayName: '24 November 2025',
-//                     startDate: '2025-11-24',
-//                     endDate: '2025-11-24',
-//                 })
-//             }
-//         })
-//     })
-//     describe('periods for the period last 90 days', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_90_DAYS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 90 days', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(90)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'DAILY',
-//                     id: 'LAST_90_DAYS',
-//                     displayName: 'Last 90 days',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods[0]).toEqual({
-//                     periodType: 'DAILY',
-//                     id: '20250826',
-//                     displayName: '26 August 2025',
-//                     startDate: '2025-08-26',
-//                     endDate: '2025-08-26',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods[89]).toEqual({
-//                     periodType: 'DAILY',
-//                     id: '20251124',
-//                     displayName: '24 November 2025',
-//                     startDate: '2025-11-24',
-//                     endDate: '2025-11-24',
-//                 })
-//             }
-//         })
-//     })
-//     describe('periods for the period last 180 days', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_180_DAYS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 180 days', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(180)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'DAILY',
-//                     id: 'LAST_180_DAYS',
-//                     displayName: 'Last 180 days',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods[0]).toEqual({
-//                     periodType: 'DAILY',
-//                     id: '20250528',
-//                     displayName: '28 May 2025',
-//                     startDate: '2025-05-28',
-//                     endDate: '2025-05-28',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods[179]).toEqual({
-//                     periodType: 'DAILY',
-//                     id: '20251124',
-//                     displayName: '24 November 2025',
-//                     startDate: '2025-11-24',
-//                     endDate: '2025-11-24',
-//                 })
-//             }
-//         })
-//     })
-// })
-//
-
-//
-// describe('BIWEEKLY relative periods', () => {
-//     const periods = generateRelativePeriods({ periodType: 'BIWEEKLY' })
-//
-//     it('should generate correct number of periods', () => {
-//         // From constants: THIS_BIWEEK, LAST_BIWEEK, LAST_4_BIWEEKS
-//         expect(periods.length).toEqual(3)
-//     })
-//
-//     it('should generate correct period for the period this bi-week', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'THIS_BIWEEK'
-//         )
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'BIWEEKLY',
-//                 id: 'THIS_BIWEEK',
-//                 displayName: 'This bi-week',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'BIWEEKLY',
-//                         id: '2025BiW24',
-//                         iso: '2025BiW24',
-//                         name: 'Bi-Week 24 - 2025-11-17 - 2025-11-30',
-//                         displayName: 'Bi-Week 24 - 2025-11-17 - 2025-11-30',
-//                         startDate: '2025-11-17',
-//                         endDate: '2025-11-30',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//
-//     it('should generate correct period for the period last bi-week', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_BIWEEK'
-//         )
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'BIWEEKLY',
-//                 id: 'LAST_BIWEEK',
-//                 displayName: 'Last bi-week',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'BIWEEKLY',
-//                         id: '2025BiW23',
-//                         iso: '2025BiW23',
-//                         name: 'Bi-Week 23 - 2025-11-03 - 2025-11-16',
-//                         displayName: 'Bi-Week 23 - 2025-11-03 - 2025-11-16',
-//                         startDate: '2025-11-03',
-//                         endDate: '2025-11-16',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//
-//     describe('periods for the period last 4 bi-weeks', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_4_BIWEEKS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 4 bi-weeks', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'BIWEEKLY',
-//                     id: 'LAST_4_BIWEEKS',
-//                     displayName: 'Last 4 bi-weeks',
-//                 })
-//                 const expected = [
-//                     {
-//                         periodType: 'BIWEEKLY',
-//                         id: '2025BiW20',
-//                         iso: '2025BiW20',
-//                         name: 'Bi-Week 20 - 2025-09-22 - 2025-10-05',
-//                         displayName: 'Bi-Week 20 - 2025-09-22 - 2025-10-05',
-//                         startDate: '2025-09-22',
-//                         endDate: '2025-10-05',
-//                     },
-//                     {
-//                         periodType: 'BIWEEKLY',
-//                         id: '2025BiW21',
-//                         iso: '2025BiW21',
-//                         name: 'Bi-Week 21 - 2025-10-06 - 2025-10-19',
-//                         displayName: 'Bi-Week 21 - 2025-10-06 - 2025-10-19',
-//                         startDate: '2025-10-06',
-//                         endDate: '2025-10-19',
-//                     },
-//                     {
-//                         periodType: 'BIWEEKLY',
-//                         id: '2025BiW22',
-//                         iso: '2025BiW22',
-//                         name: 'Bi-Week 22 - 2025-10-20 - 2025-11-02',
-//                         displayName: 'Bi-Week 22 - 2025-10-20 - 2025-11-02',
-//                         startDate: '2025-10-20',
-//                         endDate: '2025-11-02',
-//                     },
-//                     {
-//                         periodType: 'BIWEEKLY',
-//                         id: '2025BiW23',
-//                         iso: '2025BiW23',
-//                         name: 'Bi-Week 23 - 2025-11-03 - 2025-11-16',
-//                         displayName: 'Bi-Week 23 - 2025-11-03 - 2025-11-16',
-//                         startDate: '2025-11-03',
-//                         endDate: '2025-11-16',
-//                     },
-//                 ]
-//                 expect(selectedPeriod.fixedPeriods).toEqual(expected)
-//             }
-//         })
-//     })
-// })
-//
+describe('DAILY  relative periods', () => {
+    const periods = generateRelativePeriods({
+        periodType: 'DAILY',
+        referenceDate: referenceDate.toString(),
+    })
+    it('should generate correct number of periods', () => {
+        expect(periods.length).toEqual(9)
+    })
+    it(`should generate correct period for the period today`, () => {
+        const selectedPeriod = periods.find((period) => period.id === 'TODAY')
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'DAILY',
+                id: 'TODAY',
+                displayName: 'Today',
+                fixedPeriods: [
+                    {
+                        periodType: 'DAILY',
+                        id: '20251125',
+                        displayName: 'November 25, 2025',
+                        startDate: '2025-11-25',
+                        endDate: '2025-11-25',
+                    },
+                ],
+            })
+        }
+    })
+    it(`should generate correct period for the period yesterday`, () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'YESTERDAY'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'DAILY',
+                id: 'YESTERDAY',
+                displayName: 'Yesterday',
+                fixedPeriods: [
+                    {
+                        periodType: 'DAILY',
+                        id: '20251124',
+                        displayName: 'November 24, 2025',
+                        startDate: '2025-11-24',
+                        endDate: '2025-11-24',
+                    },
+                ],
+            })
+        }
+    })
+    describe('periods for the period last 3 days', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_3_DAYS'
+        )
+        it(`should be defined`, () => expect(selectedPeriod).toBeDefined())
+        it(`should generate 3 days period`, () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(3)
+        })
+        it(`should generate correct period`, () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'DAILY',
+                    id: 'LAST_3_DAYS',
+                    displayName: 'Last 3 days',
+                    fixedPeriods: [
+                        {
+                            periodType: 'DAILY',
+                            id: '20251122',
+                            displayName: 'November 22, 2025',
+                            startDate: '2025-11-22',
+                            endDate: '2025-11-22',
+                        },
+                        {
+                            periodType: 'DAILY',
+                            id: '20251123',
+                            displayName: 'November 23, 2025',
+                            startDate: '2025-11-23',
+                            endDate: '2025-11-23',
+                        },
+                        {
+                            periodType: 'DAILY',
+                            id: '20251124',
+                            displayName: 'November 24, 2025',
+                            startDate: '2025-11-24',
+                            endDate: '2025-11-24',
+                        },
+                    ],
+                })
+            }
+        })
+    })
+    describe('periods for the period last 7 days', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_7_DAYS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 7 days', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(7)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'DAILY',
+                    id: 'LAST_7_DAYS',
+                    displayName: 'Last 7 days',
+                    fixedPeriods: [
+                        {
+                            periodType: 'DAILY',
+                            id: '20251118',
+                            displayName: 'November 18, 2025',
+                            startDate: '2025-11-18',
+                            endDate: '2025-11-18',
+                        },
+                        {
+                            periodType: 'DAILY',
+                            id: '20251119',
+                            displayName: 'November 19, 2025',
+                            startDate: '2025-11-19',
+                            endDate: '2025-11-19',
+                        },
+                        {
+                            periodType: 'DAILY',
+                            id: '20251120',
+                            displayName: 'November 20, 2025',
+                            startDate: '2025-11-20',
+                            endDate: '2025-11-20',
+                        },
+                        {
+                            periodType: 'DAILY',
+                            id: '20251121',
+                            displayName: 'November 21, 2025',
+                            startDate: '2025-11-21',
+                            endDate: '2025-11-21',
+                        },
+                        {
+                            periodType: 'DAILY',
+                            id: '20251122',
+                            displayName: 'November 22, 2025',
+                            startDate: '2025-11-22',
+                            endDate: '2025-11-22',
+                        },
+                        {
+                            periodType: 'DAILY',
+                            id: '20251123',
+                            displayName: 'November 23, 2025',
+                            startDate: '2025-11-23',
+                            endDate: '2025-11-23',
+                        },
+                        {
+                            periodType: 'DAILY',
+                            id: '20251124',
+                            displayName: 'November 24, 2025',
+                            startDate: '2025-11-24',
+                            endDate: '2025-11-24',
+                        },
+                    ],
+                })
+            }
+        })
+    })
+    describe('periods for the period last 14 days', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_14_DAYS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 14 days', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(14)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'DAILY',
+                    id: 'LAST_14_DAYS',
+                    displayName: 'Last 14 days',
+                })
+                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                    periodType: 'DAILY',
+                    id: '20251111',
+                    iso: '20251111',
+                    name: '2025-11-11',
+                    displayName: 'November 11, 2025',
+                    startDate: '2025-11-11',
+                    endDate: '2025-11-11',
+                })
+                expect(selectedPeriod.fixedPeriods[13]).toEqual({
+                    periodType: 'DAILY',
+                    id: '20251124',
+                    displayName: 'November 24, 2025',
+                    iso: '20251124',
+                    name: '2025-11-24',
+                    startDate: '2025-11-24',
+                    endDate: '2025-11-24',
+                })
+            }
+        })
+    })
+    describe('periods for the period last 30 days', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_30_DAYS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 30 days', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(30)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'DAILY',
+                    id: 'LAST_30_DAYS',
+                    displayName: 'Last 30 days',
+                })
+                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                    periodType: 'DAILY',
+                    id: '20251026',
+                    iso: '20251026',
+                    name: '2025-10-26',
+                    displayName: 'October 26, 2025',
+                    startDate: '2025-10-26',
+                    endDate: '2025-10-26',
+                })
+                expect(selectedPeriod.fixedPeriods[29]).toEqual({
+                    periodType: 'DAILY',
+                    id: '20251124',
+                    iso: '20251124',
+                    name: '2025-11-24',
+                    displayName: 'November 24, 2025',
+                    startDate: '2025-11-24',
+                    endDate: '2025-11-24',
+                })
+            }
+        })
+    })
+    describe('periods for the period last 60 days', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_60_DAYS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 60 days', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(60)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'DAILY',
+                    id: 'LAST_60_DAYS',
+                    displayName: 'Last 60 days',
+                })
+                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                    periodType: 'DAILY',
+                    id: '20250926',
+                    displayName: 'September 26, 2025',
+                    iso: '20250926',
+                    name: '2025-09-26',
+                    startDate: '2025-09-26',
+                    endDate: '2025-09-26',
+                })
+                expect(selectedPeriod.fixedPeriods[59]).toEqual({
+                    periodType: 'DAILY',
+                    id: '20251124',
+                    iso: '20251124',
+                    name: '2025-11-24',
+                    displayName: 'November 24, 2025',
+                    startDate: '2025-11-24',
+                    endDate: '2025-11-24',
+                })
+            }
+        })
+    })
+    describe('periods for the period last 90 days', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_90_DAYS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 90 days', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(90)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'DAILY',
+                    id: 'LAST_90_DAYS',
+                    displayName: 'Last 90 days',
+                })
+                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                    periodType: 'DAILY',
+                    id: '20250827',
+                    iso: '20250827',
+                    name: '2025-08-27',
+                    displayName: 'August 27, 2025',
+                    startDate: '2025-08-27',
+                    endDate: '2025-08-27',
+                })
+                expect(selectedPeriod.fixedPeriods[89]).toEqual({
+                    periodType: 'DAILY',
+                    id: '20251124',
+                    iso: '20251124',
+                    name: '2025-11-24',
+                    displayName: 'November 24, 2025',
+                    startDate: '2025-11-24',
+                    endDate: '2025-11-24',
+                })
+            }
+        })
+    })
+    describe('periods for the period last 180 days', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_180_DAYS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 180 days', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(180)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'DAILY',
+                    id: 'LAST_180_DAYS',
+                    displayName: 'Last 180 days',
+                })
+                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                    periodType: 'DAILY',
+                    id: '20250529',
+                    iso: '20250529',
+                    name: '2025-05-29',
+                    displayName: 'May 29, 2025',
+                    startDate: '2025-05-29',
+                    endDate: '2025-05-29',
+                })
+                expect(selectedPeriod.fixedPeriods[179]).toEqual({
+                    periodType: 'DAILY',
+                    id: '20251124',
+                    iso: '20251124',
+                    name: '2025-11-24',
+                    displayName: 'November 24, 2025',
+                    startDate: '2025-11-24',
+                    endDate: '2025-11-24',
+                })
+            }
+        })
+    })
+})
 
 //
 // describe('QUARTERLY relative periods', () => {

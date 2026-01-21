@@ -6,6 +6,7 @@ import { FixedPeriod, PeriodType, RelativePeriod } from '../types'
 import {
     getBiMonthsPeriodType,
     getBiWeeksPeriodType,
+    getDaysPeriodType,
     getMonthsPeriodType,
     getWeeksPeriodType,
 } from './constants'
@@ -256,9 +257,59 @@ const generateRelativePeriods: GenerateRelativePeriods = ({
         })
     }
     if (periodType === 'DAILY') {
-        return []
+        return getDaysPeriodType().map((periodTypeConfig) => {
+            const fixedPeriods: Array<FixedPeriod> = []
+            if (periodTypeConfig.thisYear) {
+                // We generate periods based on the type for the current year of the selected date
+                const startDate = date.with({
+                    day: 1,
+                    month: 1,
+                })
+                for (let item = 0; item < startDate.daysInYear; item++) {
+                    const offsetDate = startDate
+                        .add({ days: item })
+                        .toPlainDateTime()
+                        .toPlainDate()
+                        .toString()
+                    fixedPeriods.push(
+                        getFixedPeriodByDate({
+                            periodType: 'DAILY',
+                            date: offsetDate,
+                            calendar: calendar ?? 'gregory',
+                        })
+                    )
+                }
+            } else {
+                for (let item = 1; item <= periodTypeConfig.duration; item++) {
+                    const offsetDate = date
+                        .add({
+                            days: item * periodTypeConfig.offset,
+                        })
+                        .toPlainDateTime()
+                        .toPlainDate()
+                        .toString()
+                    fixedPeriods.push(
+                        getFixedPeriodByDate({
+                            periodType: 'DAILY',
+                            date: offsetDate,
+                            calendar: calendar ?? 'gregory',
+                        })
+                    )
+                }
+                // If the offset is negative, the order of the periods is reversed, we need to reverse the array again
+                if (periodTypeConfig.offset) {
+                    fixedPeriods.reverse()
+                }
+            }
+            return {
+                name: periodTypeConfig.name,
+                id: periodTypeConfig.id,
+                periodType: 'DAILY' as const,
+                displayName: periodTypeConfig.name,
+                fixedPeriods,
+            }
+        })
     }
-
     return []
 }
 
