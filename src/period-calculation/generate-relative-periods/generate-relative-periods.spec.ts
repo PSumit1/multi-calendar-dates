@@ -416,7 +416,505 @@ describe('MONTHLY relative periods', () => {
         })
     })
 })
-//
+
+describe('WEEKLY relative periods', () => {
+    const periods = generateRelativePeriods({
+        periodType: 'WEEKLY',
+        referenceDate: referenceDate.toString(),
+    })
+    it('should generate correct number of periods', () => {
+        expect(periods.length).toEqual(6)
+    })
+    it('should generate correct period for the period this week', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'THIS_WEEK'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'WEEKLY',
+                id: 'THIS_WEEK',
+                displayName: 'This week',
+                fixedPeriods: [
+                    {
+                        periodType: 'WEEKLY',
+                        id: '2025W48',
+                        iso: '2025W48',
+                        name: 'Week 48 - 2025-11-24 - 2025-11-30',
+                        displayName: 'Week 48 - 2025-11-24 - 2025-11-30',
+                        startDate: '2025-11-24',
+                        endDate: '2025-11-30',
+                    },
+                ],
+            })
+        }
+    })
+    it('should generate correct period for the period last week', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_WEEK'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'WEEKLY',
+                id: 'LAST_WEEK',
+                displayName: 'Last week',
+                fixedPeriods: [
+                    {
+                        periodType: 'WEEKLY',
+                        id: '2025W47',
+                        iso: '2025W47',
+                        name: 'Week 47 - 2025-11-17 - 2025-11-23',
+                        displayName: 'Week 47 - 2025-11-17 - 2025-11-23',
+                        startDate: '2025-11-17',
+                        endDate: '2025-11-23',
+                    },
+                ],
+            })
+        }
+    })
+    describe('periods for the period last 4 weeks', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_4_WEEKS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 4 weeks', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'WEEKLY',
+                    id: 'LAST_4_WEEKS',
+                    displayName: 'Last 4 weeks',
+                })
+                const expected = [
+                    {
+                        periodType: 'WEEKLY',
+                        id: '2025W44',
+                        iso: '2025W44',
+                        name: 'Week 44 - 2025-10-27 - 2025-11-02',
+                        displayName: 'Week 44 - 2025-10-27 - 2025-11-02',
+                        startDate: '2025-10-27',
+                        endDate: '2025-11-02',
+                    },
+                    {
+                        periodType: 'WEEKLY',
+                        id: '2025W45',
+                        iso: '2025W45',
+                        name: 'Week 45 - 2025-11-03 - 2025-11-09',
+                        displayName: 'Week 45 - 2025-11-03 - 2025-11-09',
+                        startDate: '2025-11-03',
+                        endDate: '2025-11-09',
+                    },
+                    {
+                        periodType: 'WEEKLY',
+                        id: '2025W46',
+                        iso: '2025W46',
+                        name: 'Week 46 - 2025-11-10 - 2025-11-16',
+                        displayName: 'Week 46 - 2025-11-10 - 2025-11-16',
+                        startDate: '2025-11-10',
+                        endDate: '2025-11-16',
+                    },
+                    {
+                        periodType: 'WEEKLY',
+                        id: '2025W47',
+                        iso: '2025W47',
+                        name: 'Week 47 - 2025-11-17 - 2025-11-23',
+                        displayName: 'Week 47 - 2025-11-17 - 2025-11-23',
+                        startDate: '2025-11-17',
+                        endDate: '2025-11-23',
+                    },
+                ]
+                expect(selectedPeriod.fixedPeriods).toEqual(expected)
+            }
+        })
+    })
+    describe('periods for the period last 12 weeks', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_12_WEEKS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 12 weeks', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(12)
+        })
+        it('should generate correct period for the period last 12 weeks', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'WEEKLY',
+                    id: 'LAST_12_WEEKS',
+                    displayName: 'Last 12 weeks',
+                })
+                expect(selectedPeriod.fixedPeriods.length).toEqual(12)
+                // Oldest (12 weeks ago) to most recent (last week)
+                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                    periodType: 'WEEKLY',
+                    id: '2025W36',
+                    iso: '2025W36',
+                    name: 'Week 36 - 2025-09-01 - 2025-09-07',
+                    displayName: 'Week 36 - 2025-09-01 - 2025-09-07',
+                    startDate: '2025-09-01',
+                    endDate: '2025-09-07',
+                })
+                expect(selectedPeriod.fixedPeriods[11]).toEqual({
+                    periodType: 'WEEKLY',
+                    id: '2025W47',
+                    iso: '2025W47',
+                    name: 'Week 47 - 2025-11-17 - 2025-11-23',
+                    displayName: 'Week 47 - 2025-11-17 - 2025-11-23',
+                    startDate: '2025-11-17',
+                    endDate: '2025-11-23',
+                })
+            }
+        })
+    })
+})
+
+describe('BIMONTHLY relative periods', () => {
+    const periods = generateRelativePeriods({
+        periodType: 'BIMONTHLY',
+        referenceDate: referenceDate.toString(),
+    })
+
+    it('should generate correct number of periods', () => {
+        // From constants: THIS_BIMONTH, LAST_BIMONTH, LAST_6_BIMONTHS, BIMONTHS_THIS_YEAR
+        expect(periods.length).toEqual(4)
+    })
+
+    it('should generate correct period for the period this bi-month', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'THIS_BIMONTH'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'BIMONTHLY',
+                id: 'THIS_BIMONTH',
+                displayName: 'This bi-month',
+                fixedPeriods: [
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202506B',
+                        iso: '202506B',
+                        name: 'November - December 2025',
+                        displayName: 'November - December 2025',
+                        startDate: '2025-11-01',
+                        endDate: '2025-12-31',
+                    },
+                ],
+            })
+        }
+    })
+
+    it('should generate correct period for the period last bi-month', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_BIMONTH'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'BIMONTHLY',
+                id: 'LAST_BIMONTH',
+                displayName: 'Last bi-month',
+                fixedPeriods: [
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202505B',
+                        iso: '202505B',
+                        name: 'September - October 2025',
+                        displayName: 'September - October 2025',
+                        startDate: '2025-09-01',
+                        endDate: '2025-10-31',
+                    },
+                ],
+            })
+        }
+    })
+
+    describe('periods for the period last 6 bi-months', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_6_BIMONTHS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 6 bi-months', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(6)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'BIMONTHLY',
+                    id: 'LAST_6_BIMONTHS',
+                    displayName: 'Last 6 bi-months',
+                })
+
+                const expected = [
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202406B',
+                        iso: '202406B',
+                        name: 'November - December 2024',
+                        displayName: 'November - December 2024',
+                        startDate: '2024-11-01',
+                        endDate: '2024-12-31',
+                    },
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202501B',
+                        iso: '202501B',
+                        name: 'January - February 2025',
+                        displayName: 'January - February 2025',
+                        startDate: '2025-01-01',
+                        endDate: '2025-02-28',
+                    },
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202502B',
+                        iso: '202502B',
+                        name: 'March - April 2025',
+                        displayName: 'March - April 2025',
+                        startDate: '2025-03-01',
+                        endDate: '2025-04-30',
+                    },
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202503B',
+                        iso: '202503B',
+                        name: 'May - June 2025',
+                        displayName: 'May - June 2025',
+                        startDate: '2025-05-01',
+                        endDate: '2025-06-30',
+                    },
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202504B',
+                        iso: '202504B',
+                        name: 'July - August 2025',
+                        displayName: 'July - August 2025',
+                        startDate: '2025-07-01',
+                        endDate: '2025-08-31',
+                    },
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202505B',
+                        iso: '202505B',
+                        name: 'September - October 2025',
+                        displayName: 'September - October 2025',
+                        startDate: '2025-09-01',
+                        endDate: '2025-10-31',
+                    },
+                ]
+                expect(selectedPeriod.fixedPeriods).toEqual(expected)
+            }
+        })
+    })
+
+    describe('periods for bi-months this year', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'BIMONTHS_THIS_YEAR'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 6 bi-months', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(6)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'BIMONTHLY',
+                    id: 'BIMONTHS_THIS_YEAR',
+                    displayName: 'Bi-months this year',
+                })
+                const expected = [
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202501B',
+                        iso: '202501B',
+                        name: 'January - February 2025',
+                        displayName: 'January - February 2025',
+                        startDate: '2025-01-01',
+                        endDate: '2025-02-28',
+                    },
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202502B',
+                        iso: '202502B',
+                        name: 'March - April 2025',
+                        displayName: 'March - April 2025',
+                        startDate: '2025-03-01',
+                        endDate: '2025-04-30',
+                    },
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202503B',
+                        iso: '202503B',
+                        name: 'May - June 2025',
+                        displayName: 'May - June 2025',
+                        startDate: '2025-05-01',
+                        endDate: '2025-06-30',
+                    },
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202504B',
+                        iso: '202504B',
+                        name: 'July - August 2025',
+                        displayName: 'July - August 2025',
+                        startDate: '2025-07-01',
+                        endDate: '2025-08-31',
+                    },
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202505B',
+                        iso: '202505B',
+                        name: 'September - October 2025',
+                        displayName: 'September - October 2025',
+                        startDate: '2025-09-01',
+                        endDate: '2025-10-31',
+                    },
+                    {
+                        periodType: 'BIMONTHLY',
+                        id: '202506B',
+                        iso: '202506B',
+                        name: 'November - December 2025',
+                        displayName: 'November - December 2025',
+                        startDate: '2025-11-01',
+                        endDate: '2025-12-31',
+                    },
+                ]
+                expect(selectedPeriod.fixedPeriods).toEqual(expected)
+            }
+        })
+    })
+})
+
+describe('BIWEEKLY relative periods', () => {
+    const periods = generateRelativePeriods({
+        periodType: 'BIWEEKLY',
+        referenceDate: referenceDate.toString(),
+    })
+
+    it('should generate correct number of periods', () => {
+        // From constants: THIS_BIWEEK, LAST_BIWEEK, LAST_4_BIWEEKS
+        expect(periods.length).toEqual(3)
+    })
+
+    it('should generate correct period for the period this bi-week', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'THIS_BIWEEK'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'BIWEEKLY',
+                id: 'THIS_BIWEEK',
+                displayName: 'This bi-week',
+                fixedPeriods: [
+                    {
+                        periodType: 'BIWEEKLY',
+                        id: '2025BiW24',
+                        iso: '2025BiW24',
+                        name: 'Bi-Week 24 - 2025-11-17 - 2025-11-30',
+                        displayName: 'Bi-Week 24 - 2025-11-17 - 2025-11-30',
+                        startDate: '2025-11-17',
+                        endDate: '2025-11-30',
+                    },
+                ],
+            })
+        }
+    })
+
+    it('should generate correct period for the period last bi-week', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_BIWEEK'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'BIWEEKLY',
+                id: 'LAST_BIWEEK',
+                displayName: 'Last bi-week',
+                fixedPeriods: [
+                    {
+                        periodType: 'BIWEEKLY',
+                        id: '2025BiW23',
+                        iso: '2025BiW23',
+                        name: 'Bi-Week 23 - 2025-11-03 - 2025-11-16',
+                        displayName: 'Bi-Week 23 - 2025-11-03 - 2025-11-16',
+                        startDate: '2025-11-03',
+                        endDate: '2025-11-16',
+                    },
+                ],
+            })
+        }
+    })
+
+    describe('periods for the period last 4 bi-weeks', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_4_BIWEEKS'
+        )
+        it('should be defined', () => {
+            expect(selectedPeriod).toBeDefined()
+        })
+        it('should generate 4 bi-weeks', () => {
+            expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
+        })
+        it('should generate correct period', () => {
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    periodType: 'BIWEEKLY',
+                    id: 'LAST_4_BIWEEKS',
+                    displayName: 'Last 4 bi-weeks',
+                })
+                const expected = [
+                    {
+                        periodType: 'BIWEEKLY',
+                        id: '2025BiW20',
+                        iso: '2025BiW20',
+                        name: 'Bi-Week 20 - 2025-09-22 - 2025-10-05',
+                        displayName: 'Bi-Week 20 - 2025-09-22 - 2025-10-05',
+                        startDate: '2025-09-22',
+                        endDate: '2025-10-05',
+                    },
+                    {
+                        periodType: 'BIWEEKLY',
+                        id: '2025BiW21',
+                        iso: '2025BiW21',
+                        name: 'Bi-Week 21 - 2025-10-06 - 2025-10-19',
+                        displayName: 'Bi-Week 21 - 2025-10-06 - 2025-10-19',
+                        startDate: '2025-10-06',
+                        endDate: '2025-10-19',
+                    },
+                    {
+                        periodType: 'BIWEEKLY',
+                        id: '2025BiW22',
+                        iso: '2025BiW22',
+                        name: 'Bi-Week 22 - 2025-10-20 - 2025-11-02',
+                        displayName: 'Bi-Week 22 - 2025-10-20 - 2025-11-02',
+                        startDate: '2025-10-20',
+                        endDate: '2025-11-02',
+                    },
+                    {
+                        periodType: 'BIWEEKLY',
+                        id: '2025BiW23',
+                        iso: '2025BiW23',
+                        name: 'Bi-Week 23 - 2025-11-03 - 2025-11-16',
+                        displayName: 'Bi-Week 23 - 2025-11-03 - 2025-11-16',
+                        startDate: '2025-11-03',
+                        endDate: '2025-11-16',
+                    },
+                ]
+                expect(selectedPeriod.fixedPeriods).toEqual(expected)
+            }
+        })
+    })
+})
+
 // describe('DAILY  relative periods', () => {
 //     const periods = generateRelativePeriods({
 //         periodType: 'DAILY',
@@ -750,161 +1248,7 @@ describe('MONTHLY relative periods', () => {
 //     })
 // })
 //
-// describe('WEEKLY relative periods', () => {
-//     const periods = generateRelativePeriods({
-//         periodType: 'WEEKLY',
-//     })
-//     it('should generate correct number of periods', () => {
-//         expect(periods.length).toEqual(6)
-//     })
-//     it('should generate correct period for the period this week', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'THIS_WEEK'
-//         )
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'WEEKLY',
-//                 id: 'THIS_WEEK',
-//                 displayName: 'This week',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'WEEKLY',
-//                         id: '2025W48',
-//                         iso: '2025W48',
-//                         name: 'Week 48 - 2025-11-24 - 2025-11-30',
-//                         displayName: 'Week 48 - 2025-11-24 - 2025-11-30',
-//                         startDate: '2025-11-24',
-//                         endDate: '2025-11-30',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//     it('should generate correct period for the period last week', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_WEEK'
-//         )
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'WEEKLY',
-//                 id: 'LAST_WEEK',
-//                 displayName: 'Last week',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'WEEKLY',
-//                         id: '2025W47',
-//                         iso: '2025W47',
-//                         name: 'Week 47 - 2025-11-17 - 2025-11-23',
-//                         displayName: 'Week 47 - 2025-11-17 - 2025-11-23',
-//                         startDate: '2025-11-17',
-//                         endDate: '2025-11-23',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//     describe('periods for the period last 4 weeks', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_4_WEEKS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 4 weeks', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'WEEKLY',
-//                     id: 'LAST_4_WEEKS',
-//                     displayName: 'Last 4 weeks',
-//                 })
-//                 const expected = [
-//                     {
-//                         periodType: 'WEEKLY',
-//                         id: '2025W44',
-//                         iso: '2025W44',
-//                         name: 'Week 44 - 2025-10-27 - 2025-11-02',
-//                         displayName: 'Week 44 - 2025-10-27 - 2025-11-02',
-//                         startDate: '2025-10-27',
-//                         endDate: '2025-11-02',
-//                     },
-//                     {
-//                         periodType: 'WEEKLY',
-//                         id: '2025W45',
-//                         iso: '2025W45',
-//                         name: 'Week 45 - 2025-11-03 - 2025-11-09',
-//                         displayName: 'Week 45 - 2025-11-03 - 2025-11-09',
-//                         startDate: '2025-11-03',
-//                         endDate: '2025-11-09',
-//                     },
-//                     {
-//                         periodType: 'WEEKLY',
-//                         id: '2025W46',
-//                         iso: '2025W46',
-//                         name: 'Week 46 - 2025-11-10 - 2025-11-16',
-//                         displayName: 'Week 46 - 2025-11-10 - 2025-11-16',
-//                         startDate: '2025-11-10',
-//                         endDate: '2025-11-16',
-//                     },
-//                     {
-//                         periodType: 'WEEKLY',
-//                         id: '2025W47',
-//                         iso: '2025W47',
-//                         name: 'Week 47 - 2025-11-17 - 2025-11-23',
-//                         displayName: 'Week 47 - 2025-11-17 - 2025-11-23',
-//                         startDate: '2025-11-17',
-//                         endDate: '2025-11-23',
-//                     },
-//                 ]
-//                 expect(selectedPeriod.fixedPeriods).toEqual(expected)
-//             }
-//         })
-//     })
-//     describe('periods for the period last 12 weeks', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_12_WEEKS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 12 weeks', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(12)
-//         })
-//         it('should generate correct period for the period last 12 weeks', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'WEEKLY',
-//                     id: 'LAST_12_WEEKS',
-//                     displayName: 'Last 12 weeks',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods.length).toEqual(12)
-//                 // Oldest (12 weeks ago) to most recent (last week)
-//                 expect(selectedPeriod.fixedPeriods[0]).toEqual({
-//                     periodType: 'WEEKLY',
-//                     id: '2025W36',
-//                     iso: '2025W36',
-//                     name: 'Week 36 - 2025-09-01 - 2025-09-07',
-//                     displayName: 'Week 36 - 2025-09-01 - 2025-09-07',
-//                     startDate: '2025-09-01',
-//                     endDate: '2025-09-07',
-//                 })
-//                 expect(selectedPeriod.fixedPeriods[11]).toEqual({
-//                     periodType: 'WEEKLY',
-//                     id: '2025W47',
-//                     iso: '2025W47',
-//                     name: 'Week 47 - 2025-11-17 - 2025-11-23',
-//                     displayName: 'Week 47 - 2025-11-17 - 2025-11-23',
-//                     startDate: '2025-11-17',
-//                     endDate: '2025-11-23',
-//                 })
-//             }
-//         })
-//     })
-// })
+
 //
 // describe('BIWEEKLY relative periods', () => {
 //     const periods = generateRelativePeriods({ periodType: 'BIWEEKLY' })
@@ -1025,220 +1369,7 @@ describe('MONTHLY relative periods', () => {
 //     })
 // })
 //
-// describe('BIMONTHLY relative periods', () => {
-//     const periods = generateRelativePeriods({ periodType: 'BIMONTHLY' })
-//
-//     it('should generate correct number of periods', () => {
-//         // From constants: THIS_BIMONTH, LAST_BIMONTH, LAST_6_BIMONTHS, BIMONTHS_THIS_YEAR
-//         expect(periods.length).toEqual(4)
-//     })
-//
-//     it('should generate correct period for the period this bi-month', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'THIS_BIMONTH'
-//         )
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'BIMONTHLY',
-//                 id: 'THIS_BIMONTH',
-//                 displayName: 'This bi-month',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202506B',
-//                         iso: '202506B',
-//                         name: 'November - December 2025',
-//                         displayName: 'November - December 2025',
-//                         startDate: '2025-11-01',
-//                         endDate: '2025-12-31',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//
-//     it('should generate correct period for the period last bi-month', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_BIMONTH'
-//         )
-//         expect(selectedPeriod).toBeDefined()
-//         if (selectedPeriod) {
-//             expect(selectedPeriod).toMatchObject({
-//                 periodType: 'BIMONTHLY',
-//                 id: 'LAST_BIMONTH',
-//                 displayName: 'Last bi-month',
-//                 fixedPeriods: [
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202505B',
-//                         iso: '202505B',
-//                         name: 'September - October 2025',
-//                         displayName: 'September - October 2025',
-//                         startDate: '2025-09-01',
-//                         endDate: '2025-10-31',
-//                     },
-//                 ],
-//             })
-//         }
-//     })
-//
-//     describe('periods for the period last 6 bi-months', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'LAST_6_BIMONTHS'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 6 bi-months', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(6)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'BIMONTHLY',
-//                     id: 'LAST_6_BIMONTHS',
-//                     displayName: 'Last 6 bi-months',
-//                 })
-//                 const expected = [
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202406B',
-//                         iso: '202406B',
-//                         name: 'November - December 2024',
-//                         displayName: 'November - December 2024',
-//                         startDate: '2024-11-01',
-//                         endDate: '2024-12-31',
-//                     },
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202501B',
-//                         iso: '202501B',
-//                         name: 'January - February 2025',
-//                         displayName: 'January - February 2025',
-//                         startDate: '2025-01-01',
-//                         endDate: '2025-02-28',
-//                     },
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202502B',
-//                         iso: '202502B',
-//                         name: 'March - April 2025',
-//                         displayName: 'March - April 2025',
-//                         startDate: '2025-03-01',
-//                         endDate: '2025-04-30',
-//                     },
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202503B',
-//                         iso: '202503B',
-//                         name: 'May - June 2025',
-//                         displayName: 'May - June 2025',
-//                         startDate: '2025-05-01',
-//                         endDate: '2025-06-30',
-//                     },
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202504B',
-//                         iso: '202504B',
-//                         name: 'July - August 2025',
-//                         displayName: 'July - August 2025',
-//                         startDate: '2025-07-01',
-//                         endDate: '2025-08-31',
-//                     },
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202505B',
-//                         iso: '202505B',
-//                         name: 'September - October 2025',
-//                         displayName: 'September - October 2025',
-//                         startDate: '2025-09-01',
-//                         endDate: '2025-10-31',
-//                     },
-//                 ]
-//                 expect(selectedPeriod.fixedPeriods).toEqual(expected)
-//             }
-//         })
-//     })
-//
-//     describe('periods for bi-months this year', () => {
-//         const selectedPeriod = periods.find(
-//             (period) => period.id === 'BIMONTHS_THIS_YEAR'
-//         )
-//         it('should be defined', () => {
-//             expect(selectedPeriod).toBeDefined()
-//         })
-//         it('should generate 6 bi-months', () => {
-//             expect(selectedPeriod?.fixedPeriods.length).toEqual(6)
-//         })
-//         it('should generate correct period', () => {
-//             if (selectedPeriod) {
-//                 expect(selectedPeriod).toMatchObject({
-//                     periodType: 'BIMONTHLY',
-//                     id: 'BIMONTHS_THIS_YEAR',
-//                     displayName: 'Bi-months this year',
-//                 })
-//                 const expected = [
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202501B',
-//                         iso: '202501B',
-//                         name: 'January - February 2025',
-//                         displayName: 'January - February 2025',
-//                         startDate: '2025-01-01',
-//                         endDate: '2025-02-28',
-//                     },
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202502B',
-//                         iso: '202502B',
-//                         name: 'March - April 2025',
-//                         displayName: 'March - April 2025',
-//                         startDate: '2025-03-01',
-//                         endDate: '2025-04-30',
-//                     },
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202503B',
-//                         iso: '202503B',
-//                         name: 'May - June 2025',
-//                         displayName: 'May - June 2025',
-//                         startDate: '2025-05-01',
-//                         endDate: '2025-06-30',
-//                     },
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202504B',
-//                         iso: '202504B',
-//                         name: 'July - August 2025',
-//                         displayName: 'July - August 2025',
-//                         startDate: '2025-07-01',
-//                         endDate: '2025-08-31',
-//                     },
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202505B',
-//                         iso: '202505B',
-//                         name: 'September - October 2025',
-//                         displayName: 'September - October 2025',
-//                         startDate: '2025-09-01',
-//                         endDate: '2025-10-31',
-//                     },
-//                     {
-//                         periodType: 'BIMONTHLY',
-//                         id: '202506B',
-//                         iso: '202506B',
-//                         name: 'November - December 2025',
-//                         displayName: 'November - December 2025',
-//                         startDate: '2025-11-01',
-//                         endDate: '2025-12-31',
-//                     },
-//                 ]
-//                 expect(selectedPeriod.fixedPeriods).toEqual(expected)
-//             }
-//         })
-//     })
-// })
+
 //
 // describe('QUARTERLY relative periods', () => {
 //     const periods = generateRelativePeriods({ periodType: 'QUARTERLY' })

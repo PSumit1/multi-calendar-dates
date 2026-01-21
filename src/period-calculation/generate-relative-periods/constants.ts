@@ -153,8 +153,7 @@ export const getBiMonthsPeriodType = (): Array<RelativePeriodTypeConfig> => [
     {
         id: 'BIMONTHS_THIS_YEAR',
         name: i18n.t('Bi-months this year'),
-        offset: 5,
-        duration: 6,
+        thisYear: true,
     },
 ]
 
