@@ -1554,3 +1554,174 @@ describe('SIXMONTHLY relative periods', () => {
         })
     })
 })
+
+describe('YEARLY relative periods', () => {
+    const periods = generateRelativePeriods({
+        periodType: 'YEARLY',
+        referenceDate: referenceDate.toString(),
+    })
+    it('should generate correct number of periods', () => {
+        expect(periods.length).toEqual(4)
+    })
+    it(`should generate correct period for the period this year`, () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'THIS_YEAR'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'YEARLY',
+                id: 'THIS_YEAR',
+                displayName: 'This year',
+                name: 'This year',
+                fixedPeriods: [
+                    {
+                        periodType: 'YEARLY',
+                        id: '2025',
+                        name: '2025',
+                        displayName: '2025',
+                        startDate: '2025-01-01',
+                        endDate: '2025-12-31',
+                    },
+                ],
+            })
+        }
+    })
+    it(`should generate correct period for the period last year`, () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_YEAR'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                id: 'LAST_YEAR',
+                displayName: 'Last year',
+                fixedPeriods: [
+                    {
+                        periodType: 'YEARLY',
+                        id: '2024',
+                        name: '2024',
+                        displayName: '2024',
+                        startDate: '2024-01-01',
+                        endDate: '2024-12-31',
+                    },
+                ],
+            })
+        }
+    })
+    describe('periods for the period last 5 years', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_5_YEARS'
+        )
+        it(`should be defined`, () => expect(selectedPeriod).toBeDefined())
+        it(`should generate 5 years`, () => {
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(5)
+        })
+        it(`should generate correct period`, () => {
+            expect(selectedPeriod).toBeDefined()
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    id: 'LAST_5_YEARS',
+                    name: 'Last 5 years',
+                })
+                expect(selectedPeriod.fixedPeriods[0]).toMatchObject({
+                    id: '2020',
+                    startDate: '2020-01-01',
+                    endDate: '2020-12-31',
+                })
+                expect(selectedPeriod.fixedPeriods[4]).toMatchObject({
+                    id: '2024',
+                    startDate: '2024-01-01',
+                    endDate: '2024-12-31',
+                })
+            }
+        })
+    })
+})
+
+describe('FINANCIAL YEAR relative periods', () => {
+    const periods = generateRelativePeriods({
+        periodType: 'FINANCIAL',
+        referenceDate: referenceDate.toString(),
+    })
+    it('should generate correct number of periods', () => {
+        expect(periods.length).toEqual(3)
+    })
+    it(`should generate correct period for the period this financial year`, () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'THIS_FINANCIAL_YEAR'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'FINANCIAL',
+                id: 'THIS_FINANCIAL_YEAR',
+                displayName: 'This financial year',
+                name: 'This financial year',
+                fixedPeriods: [
+                    {
+                        periodType: 'FYOCT',
+                        id: '2025Oct',
+                        name: 'October 2025 - September 2026',
+                        displayName: 'October 2025 - September 2026',
+                        startDate: '2025-10-01',
+                        endDate: '2026-09-30',
+                    },
+                ],
+            })
+        }
+    })
+
+    it(`should generate correct period for the period last financial year`, () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_FINANCIAL_YEAR'
+        )
+        expect(selectedPeriod).toBeDefined()
+        if (selectedPeriod) {
+            expect(selectedPeriod).toMatchObject({
+                periodType: 'FINANCIAL',
+                id: 'LAST_FINANCIAL_YEAR',
+                displayName: 'Last financial year',
+                fixedPeriods: [
+                    {
+                        periodType: 'FYOCT',
+                        id: '2024Oct',
+                        name: 'October 2024 - September 2025',
+                        displayName: 'October 2024 - September 2025',
+                        startDate: '2024-10-01',
+                        endDate: '2025-09-30',
+                    },
+                ],
+            })
+        }
+    })
+
+    describe('periods for the period last 5 financial years', () => {
+        const selectedPeriod = periods.find(
+            (period) => period.id === 'LAST_5_FINANCIAL_YEARS'
+        )
+        it(`should be defined`, () => expect(selectedPeriod).toBeDefined())
+        it(`should generate 5 financial years`, () => {
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(5)
+        })
+        it(`should generate correct period`, () => {
+            expect(selectedPeriod).toBeDefined()
+            if (selectedPeriod) {
+                expect(selectedPeriod).toMatchObject({
+                    id: 'LAST_5_FINANCIAL_YEARS',
+                    name: 'Last 5 financial years',
+                })
+                expect(selectedPeriod.fixedPeriods[0]).toMatchObject({
+                    id: '2020Oct',
+                    startDate: '2020-10-01',
+                    endDate: '2021-09-30',
+                })
+                expect(selectedPeriod.fixedPeriods[4]).toMatchObject({
+                    id: '2024Oct',
+                    startDate: '2024-10-01',
+                    endDate: '2025-09-30',
+                })
+            }
+        })
+    })
+})

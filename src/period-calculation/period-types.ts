@@ -51,3 +51,20 @@ export const periodTypes = [
     'FYNOV',
     'FYDEC',
 ] as const
+
+/*
+ * The relative period types are obtained from the analytics package only applicable for relative periods
+ * https://github.com/dhis2/analytics/blob/master/src/components/PeriodDimension/utils/index.js
+ * */
+export const relativePeriodTypes = [
+    'DAILY',
+    'WEEKLY',
+    'WEEKS_THIS_YEAR',
+    'BIWEEKLY',
+    'MONTHLY',
+    'BIMONTHLY',
+    'QUARTERLY',
+    'SIXMONTHLY',
+    'FINANCIAL',
+    'YEARLY',
+] as const

@@ -209,8 +209,7 @@ export const getFinancialYearsPeriodType =
         {
             id: 'THIS_FINANCIAL_YEAR',
             name: i18n.t('This financial year'),
-            offset: 0,
-            duration: 1,
+            thisYear: true,
         },
         {
             id: 'LAST_FINANCIAL_YEAR',
@@ -227,7 +226,7 @@ export const getFinancialYearsPeriodType =
     ]
 
 export const getYearsPeriodType = (): Array<RelativePeriodTypeConfig> => [
-    { id: 'THIS_YEAR', name: i18n.t('This year'), offset: 0, duration: 1 },
+    { id: 'THIS_YEAR', name: i18n.t('This year'), thisYear: true },
     { id: 'LAST_YEAR', name: i18n.t('Last year'), offset: -1, duration: 1 },
     {
         id: 'LAST_5_YEARS',

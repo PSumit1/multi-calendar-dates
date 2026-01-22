@@ -1,6 +1,7 @@
-import { periodTypes } from './period-types'
+import { periodTypes, relativePeriodTypes } from './period-types'
 
 export type PeriodType = typeof periodTypes[number]
+export type RelativePeriodType = typeof relativePeriodTypes[number]
 
 export type FixedPeriod = {
     periodType: PeriodType
@@ -13,7 +14,7 @@ export type FixedPeriod = {
 }
 
 export type RelativePeriod = {
-    periodType: PeriodType
+    periodType: RelativePeriodType
     name: string
     displayName: string
     id: string

@@ -2,19 +2,21 @@ import { Temporal } from '@js-temporal/polyfill'
 import { SupportedCalendar } from '../../types'
 import { getNowInCalendar } from '../../utils'
 import { getFixedPeriodByDate } from '../get-fixed-period-by-date'
-import { FixedPeriod, PeriodType, RelativePeriod } from '../types'
+import { FixedPeriod, RelativePeriod, RelativePeriodType } from '../types'
 import {
     getBiMonthsPeriodType,
     getBiWeeksPeriodType,
     getDaysPeriodType,
+    getFinancialYearsPeriodType,
     getMonthsPeriodType,
     getQuartersPeriodType,
     getSixMonthsPeriodType,
     getWeeksPeriodType,
+    getYearsPeriodType,
 } from './constants'
 
 type GenerateRelativePeriods = (options: {
-    periodType: PeriodType
+    periodType: RelativePeriodType
     referenceDate?: string
     calendar?: SupportedCalendar
 }) => Array<RelativePeriod>
@@ -415,6 +417,107 @@ const generateRelativePeriods: GenerateRelativePeriods = ({
                 name: periodTypeConfig.name,
                 id: periodTypeConfig.id,
                 periodType: 'SIXMONTHLY' as const,
+                displayName: periodTypeConfig.name,
+                fixedPeriods,
+            }
+        })
+    }
+    if (periodType === 'YEARLY') {
+        return getYearsPeriodType().map((periodTypeConfig) => {
+            if (periodTypeConfig.thisYear) {
+                return {
+                    name: periodTypeConfig.name,
+                    id: periodTypeConfig.id,
+                    periodType: 'YEARLY' as const,
+                    displayName: periodTypeConfig.name,
+                    fixedPeriods: [
+                        getFixedPeriodByDate({
+                            periodType: 'YEARLY',
+                            date: date.toString(),
+                            calendar: calendar ?? 'gregory',
+                        }),
+                    ],
+                }
+            }
+
+            const fixedPeriods: Array<FixedPeriod> = []
+            for (let item = 1; item <= periodTypeConfig.duration; item++) {
+                const offsetDate = date
+                    .add({
+                        years: item * periodTypeConfig.offset,
+                    })
+                    .toPlainDateTime()
+                    .toPlainDate()
+                    .toString()
+                fixedPeriods.push(
+                    getFixedPeriodByDate({
+                        periodType: 'YEARLY',
+                        date: offsetDate,
+                        calendar: calendar ?? 'gregory',
+                    })
+                )
+            }
+            // If the offset is negative, the order of the periods is reversed, we need to reverse the array again
+            if (periodTypeConfig.offset) {
+                fixedPeriods.reverse()
+            }
+            return {
+                name: periodTypeConfig.name,
+                id: periodTypeConfig.id,
+                periodType: 'YEARLY' as const,
+                displayName: periodTypeConfig.name,
+                fixedPeriods,
+            }
+        })
+    }
+    if (periodType === 'FINANCIAL') {
+        /*
+         * The financial year is set to Financial year October as how the analytics API treats it.
+         * */
+        return getFinancialYearsPeriodType().map((periodTypeConfig) => {
+            if (periodTypeConfig.thisYear) {
+                return {
+                    name: periodTypeConfig.name,
+                    id: periodTypeConfig.id,
+                    periodType: 'FINANCIAL' as const,
+                    displayName: periodTypeConfig.name,
+                    fixedPeriods: [
+                        getFixedPeriodByDate({
+                            periodType: 'FYOCT',
+                            date: date
+                                .toPlainDateTime()
+                                .toPlainDate()
+                                .toString(),
+                            calendar: calendar ?? 'gregory',
+                        }),
+                    ],
+                }
+            }
+            const fixedPeriods: Array<FixedPeriod> = []
+            for (let item = 1; item <= periodTypeConfig.duration; item++) {
+                const offsetDate = date
+                    .add({
+                        years: item * periodTypeConfig.offset,
+                    })
+                    .toPlainDateTime()
+                    .toPlainDate()
+                    .toString()
+                fixedPeriods.push(
+                    getFixedPeriodByDate({
+                        periodType: 'FYOCT',
+                        date: offsetDate,
+                        calendar: calendar ?? 'gregory',
+                    })
+                )
+            }
+            // If the offset is negative, the order of the periods is reversed, we need to reverse the array again
+            if (periodTypeConfig.offset) {
+                fixedPeriods.reverse()
+            }
+            return {
+                name: periodTypeConfig.name,
+                id: periodTypeConfig.id,
+                periodType: periodType,
                 displayName: periodTypeConfig.name,
                 fixedPeriods,
             }
