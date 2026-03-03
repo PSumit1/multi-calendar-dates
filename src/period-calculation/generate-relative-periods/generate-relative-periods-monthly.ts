@@ -1,7 +1,11 @@
 import { Temporal } from '@js-temporal/polyfill'
 import { SupportedCalendar } from '../../types'
 import { getFixedPeriodByDate } from '../get-fixed-period-by-date'
-import { FixedPeriod, RelativePeriod } from '../types'
+import {
+    FixedPeriod,
+    RelativePeriod,
+    RelativePeriodWithFixedPeriods,
+} from '../types'
 import { getMonthsPeriodType } from './constants'
 import ZonedDateTime = Temporal.ZonedDateTime
 import PlainDate = Temporal.PlainDate
@@ -9,12 +13,25 @@ import PlainDate = Temporal.PlainDate
 type GenerateRelativePeriodsMonthly = (options: {
     referenceDate: ZonedDateTime | PlainDate
     calendar: SupportedCalendar
+    includeFixedPeriods: boolean
 }) => Array<RelativePeriod>
 
 const generateRelativePeriodsMonthly: GenerateRelativePeriodsMonthly = ({
     referenceDate,
     calendar,
+    includeFixedPeriods = false,
 }) => {
+    if (!includeFixedPeriods) {
+        return getMonthsPeriodType().map(
+            (periodTypeConfig) =>
+                ({
+                    name: periodTypeConfig.name,
+                    id: periodTypeConfig.id,
+                    periodType: 'MONTHLY' as const,
+                    displayName: periodTypeConfig.name,
+                } as RelativePeriod)
+        )
+    }
     return getMonthsPeriodType().map((periodTypeConfig) => {
         const fixedPeriods: Array<FixedPeriod> = []
         if (periodTypeConfig.thisYear) {
@@ -65,7 +82,7 @@ const generateRelativePeriodsMonthly: GenerateRelativePeriodsMonthly = ({
             periodType: 'MONTHLY' as const,
             displayName: periodTypeConfig.name,
             fixedPeriods,
-        }
+        } as RelativePeriodWithFixedPeriods
     })
 }
 

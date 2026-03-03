@@ -9,12 +9,26 @@ import PlainDate = Temporal.PlainDate
 type GenerateRelativePeriodsQuarterly = (options: {
     referenceDate: ZonedDateTime | PlainDate
     calendar: SupportedCalendar
+    includeFixedPeriods: boolean
 }) => Array<RelativePeriod>
 
 const generateRelativePeriodsQuarterly: GenerateRelativePeriodsQuarterly = ({
     referenceDate,
     calendar,
+    includeFixedPeriods = false,
 }) => {
+    if (!includeFixedPeriods) {
+        return getQuartersPeriodType().map(
+            (periodTypeConfig) =>
+                ({
+                    name: periodTypeConfig.name,
+                    id: periodTypeConfig.id,
+                    periodType: 'QUARTERLY' as const,
+                    displayName: periodTypeConfig.name,
+                } as RelativePeriod)
+        )
+    }
+
     return getQuartersPeriodType().map((periodTypeConfig) => {
         const fixedPeriods: Array<FixedPeriod> = []
         if (periodTypeConfig.thisYear) {

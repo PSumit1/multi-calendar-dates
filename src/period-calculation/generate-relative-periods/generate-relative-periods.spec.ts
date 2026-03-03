@@ -1,5 +1,4 @@
-import { Temporal } from '@js-temporal/polyfill'
-import { getNowInCalendar } from '../../utils'
+import { RelativePeriod } from '../types'
 import generateRelativePeriods from './generate-relative-periods'
 // Start with Gregorian
 // Write tests for one period type at a time
@@ -9,21 +8,17 @@ import generateRelativePeriods from './generate-relative-periods'
  * @nnkogift will work on DAILY,MONTHLY,WEEKLY,
  * @PSummit will work on QUARTERLY, YEARLY
  * */
-const referenceDate = Temporal.ZonedDateTime.from({
-    year: 2025,
-    month: 11,
-    day: 25,
-    timeZone: 'UTC',
-})
-beforeEach(() => {
-    // November 25, 2025
-    jest.fn(getNowInCalendar).mockReturnValue(referenceDate)
-})
 
 describe('MONTHLY relative periods', () => {
-    const periods = generateRelativePeriods({
-        periodType: 'MONTHLY',
-        referenceDate: referenceDate.toString(),
+    let periods: RelativePeriod[] = []
+    beforeEach(() => {
+        // November 25, 2025
+        jest.spyOn(Date, 'now').mockReturnValue(1764028800000)
+        periods = generateRelativePeriods({
+            periodType: 'MONTHLY',
+            includeFixedPeriods: true,
+            calendar: 'gregory',
+        })
     })
     it('should generate correct number of periods', () => {
         expect(periods.length).toEqual(6)
@@ -56,6 +51,7 @@ describe('MONTHLY relative periods', () => {
         const selectedPeriod = periods.find(
             (period) => period.id === 'LAST_MONTH'
         )
+
         expect(selectedPeriod).toBeDefined()
         if (selectedPeriod) {
             expect(selectedPeriod).toMatchObject({
@@ -75,14 +71,22 @@ describe('MONTHLY relative periods', () => {
         }
     })
     describe('periods for the period last 3 months', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_3_MONTHS'
-        )
-        it(`should be defined`, () => expect(selectedPeriod).toBeDefined())
+        it(`should be defined`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_3_MONTHS'
+            )
+            expect(selectedPeriod).toBeDefined()
+        })
         it(`should generate 3 months`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_3_MONTHS'
+            )
             expect(selectedPeriod?.fixedPeriods?.length).toEqual(3)
         })
         it(`should generate correct period`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_3_MONTHS'
+            )
             expect(selectedPeriod).toBeDefined()
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
@@ -119,11 +123,16 @@ describe('MONTHLY relative periods', () => {
         })
     })
     describe('periods for the period last 6 months', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_6_MONTHS'
-        )
-        it(`should be defined`, () => expect(selectedPeriod).toBeDefined())
+        it(`should be defined`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_6_MONTHS'
+            )
+            expect(selectedPeriod).toBeDefined()
+        })
         it(`should generate correct period for the period last 6 months`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_6_MONTHS'
+            )
             expect(selectedPeriod).toBeDefined()
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
@@ -183,18 +192,29 @@ describe('MONTHLY relative periods', () => {
             }
         })
         it(`should generate 6 months for the period last 6 months`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_6_MONTHS'
+            )
             expect(selectedPeriod?.fixedPeriods?.length).toEqual(6)
         })
     })
     describe('periods for the period last 12 months', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_12_MONTHS'
-        )
-        it(`should be defined`, () => expect(selectedPeriod).toBeDefined())
+        it(`should be defined`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_12_MONTHS'
+            )
+            expect(selectedPeriod).toBeDefined()
+        })
         it(`should generate 12 months`, () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(12)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_12_MONTHS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(12)
         })
         it(`should generate correct period object`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_12_MONTHS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     id: 'LAST_12_MONTHS',
@@ -303,12 +323,15 @@ describe('MONTHLY relative periods', () => {
         })
     })
     describe('periods for the period months this year', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'MONTHS_THIS_YEAR'
-        )
+        let selectedPeriod: RelativePeriod | undefined
+        beforeEach(() => {
+            selectedPeriod = periods.find(
+                (period) => period.id === 'MONTHS_THIS_YEAR'
+            )
+        })
         it(`should be defined`, () => expect(selectedPeriod).toBeDefined())
         it(`should generate 12 months`, () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(12)
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(12)
         })
         it(`should generate correct period for the period months this year`, () => {
             expect(selectedPeriod).toMatchObject({
@@ -418,9 +441,15 @@ describe('MONTHLY relative periods', () => {
 })
 
 describe('WEEKLY relative periods', () => {
-    const periods = generateRelativePeriods({
-        periodType: 'WEEKLY',
-        referenceDate: referenceDate.toString(),
+    let periods: RelativePeriod[] = []
+    beforeEach(() => {
+        // November 25, 2025
+        jest.spyOn(Date, 'now').mockReturnValue(1764028800000)
+        periods = generateRelativePeriods({
+            periodType: 'WEEKLY',
+            includeFixedPeriods: true,
+            calendar: 'gregory',
+        })
     })
     it('should generate correct number of periods', () => {
         expect(periods.length).toEqual(6)
@@ -474,16 +503,22 @@ describe('WEEKLY relative periods', () => {
         }
     })
     describe('periods for the period last 4 weeks', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_4_WEEKS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_4_WEEKS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 4 weeks', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_4_WEEKS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(4)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_4_WEEKS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'WEEKLY',
@@ -533,25 +568,31 @@ describe('WEEKLY relative periods', () => {
         })
     })
     describe('periods for the period last 12 weeks', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_12_WEEKS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_12_WEEKS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 12 weeks', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(12)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_12_WEEKS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(12)
         })
         it('should generate correct period for the period last 12 weeks', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_12_WEEKS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'WEEKLY',
                     id: 'LAST_12_WEEKS',
                     displayName: 'Last 12 weeks',
                 })
-                expect(selectedPeriod.fixedPeriods.length).toEqual(12)
+                expect(selectedPeriod.fixedPeriods?.length).toEqual(12)
                 // Oldest (12 weeks ago) to most recent (last week)
-                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[0]).toEqual({
                     periodType: 'WEEKLY',
                     id: '2025W36',
                     iso: '2025W36',
@@ -560,7 +601,7 @@ describe('WEEKLY relative periods', () => {
                     startDate: '2025-09-01',
                     endDate: '2025-09-07',
                 })
-                expect(selectedPeriod.fixedPeriods[11]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[11]).toEqual({
                     periodType: 'WEEKLY',
                     id: '2025W47',
                     iso: '2025W47',
@@ -575,9 +616,15 @@ describe('WEEKLY relative periods', () => {
 })
 
 describe('BIMONTHLY relative periods', () => {
-    const periods = generateRelativePeriods({
-        periodType: 'BIMONTHLY',
-        referenceDate: referenceDate.toString(),
+    let periods: RelativePeriod[] = []
+    beforeEach(() => {
+        // November 25, 2025
+        jest.spyOn(Date, 'now').mockReturnValue(1764028800000)
+        periods = generateRelativePeriods({
+            periodType: 'BIMONTHLY',
+            includeFixedPeriods: true,
+            calendar: 'gregory',
+        })
     })
 
     it('should generate correct number of periods', () => {
@@ -636,16 +683,22 @@ describe('BIMONTHLY relative periods', () => {
     })
 
     describe('periods for the period last 6 bi-months', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_6_BIMONTHS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_6_BIMONTHS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 6 bi-months', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(6)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_6_BIMONTHS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(6)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_6_BIMONTHS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'BIMONTHLY',
@@ -715,16 +768,22 @@ describe('BIMONTHLY relative periods', () => {
     })
 
     describe('periods for bi-months this year', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'BIMONTHS_THIS_YEAR'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'BIMONTHS_THIS_YEAR'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 6 bi-months', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(6)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'BIMONTHS_THIS_YEAR'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(6)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'BIMONTHS_THIS_YEAR'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'BIMONTHLY',
@@ -794,9 +853,15 @@ describe('BIMONTHLY relative periods', () => {
 })
 
 describe('BIWEEKLY relative periods', () => {
-    const periods = generateRelativePeriods({
-        periodType: 'BIWEEKLY',
-        referenceDate: referenceDate.toString(),
+    let periods: RelativePeriod[] = []
+    beforeEach(() => {
+        // November 25, 2025
+        jest.spyOn(Date, 'now').mockReturnValue(1764028800000)
+        periods = generateRelativePeriods({
+            periodType: 'BIWEEKLY',
+            includeFixedPeriods: true,
+            calendar: 'gregory',
+        })
     })
 
     it('should generate correct number of periods', () => {
@@ -855,16 +920,22 @@ describe('BIWEEKLY relative periods', () => {
     })
 
     describe('periods for the period last 4 bi-weeks', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_4_BIWEEKS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_4_BIWEEKS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 4 bi-weeks', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_4_BIWEEKS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(4)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_4_BIWEEKS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'BIWEEKLY',
@@ -916,9 +987,15 @@ describe('BIWEEKLY relative periods', () => {
 })
 
 describe('DAILY  relative periods', () => {
-    const periods = generateRelativePeriods({
-        periodType: 'DAILY',
-        referenceDate: referenceDate.toString(),
+    let periods: RelativePeriod[] = []
+    beforeEach(() => {
+        // November 25, 2025
+        jest.spyOn(Date, 'now').mockReturnValue(1764028800000)
+        periods = generateRelativePeriods({
+            periodType: 'DAILY',
+            includeFixedPeriods: true,
+            calendar: 'gregory',
+        })
     })
     it('should generate correct number of periods', () => {
         expect(periods.length).toEqual(9)
@@ -966,14 +1043,22 @@ describe('DAILY  relative periods', () => {
         }
     })
     describe('periods for the period last 3 days', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_3_DAYS'
-        )
-        it(`should be defined`, () => expect(selectedPeriod).toBeDefined())
+        it(`should be defined`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_3_DAYS'
+            )
+            expect(selectedPeriod).toBeDefined()
+        })
         it(`should generate 3 days period`, () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(3)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_3_DAYS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(3)
         })
         it(`should generate correct period`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_3_DAYS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'DAILY',
@@ -1007,16 +1092,22 @@ describe('DAILY  relative periods', () => {
         })
     })
     describe('periods for the period last 7 days', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_7_DAYS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_7_DAYS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 7 days', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(7)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_7_DAYS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(7)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_7_DAYS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'DAILY',
@@ -1078,23 +1169,29 @@ describe('DAILY  relative periods', () => {
         })
     })
     describe('periods for the period last 14 days', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_14_DAYS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_14_DAYS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 14 days', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(14)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_14_DAYS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(14)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_14_DAYS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'DAILY',
                     id: 'LAST_14_DAYS',
                     displayName: 'Last 14 days',
                 })
-                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[0]).toEqual({
                     periodType: 'DAILY',
                     id: '20251111',
                     iso: '20251111',
@@ -1103,7 +1200,7 @@ describe('DAILY  relative periods', () => {
                     startDate: '2025-11-11',
                     endDate: '2025-11-11',
                 })
-                expect(selectedPeriod.fixedPeriods[13]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[13]).toEqual({
                     periodType: 'DAILY',
                     id: '20251124',
                     displayName: 'November 24, 2025',
@@ -1116,23 +1213,29 @@ describe('DAILY  relative periods', () => {
         })
     })
     describe('periods for the period last 30 days', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_30_DAYS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_30_DAYS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 30 days', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(30)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_30_DAYS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(30)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_30_DAYS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'DAILY',
                     id: 'LAST_30_DAYS',
                     displayName: 'Last 30 days',
                 })
-                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[0]).toEqual({
                     periodType: 'DAILY',
                     id: '20251026',
                     iso: '20251026',
@@ -1141,7 +1244,7 @@ describe('DAILY  relative periods', () => {
                     startDate: '2025-10-26',
                     endDate: '2025-10-26',
                 })
-                expect(selectedPeriod.fixedPeriods[29]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[29]).toEqual({
                     periodType: 'DAILY',
                     id: '20251124',
                     iso: '20251124',
@@ -1154,23 +1257,29 @@ describe('DAILY  relative periods', () => {
         })
     })
     describe('periods for the period last 60 days', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_60_DAYS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_60_DAYS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 60 days', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(60)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_60_DAYS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(60)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_60_DAYS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'DAILY',
                     id: 'LAST_60_DAYS',
                     displayName: 'Last 60 days',
                 })
-                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[0]).toEqual({
                     periodType: 'DAILY',
                     id: '20250926',
                     displayName: 'September 26, 2025',
@@ -1179,7 +1288,7 @@ describe('DAILY  relative periods', () => {
                     startDate: '2025-09-26',
                     endDate: '2025-09-26',
                 })
-                expect(selectedPeriod.fixedPeriods[59]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[59]).toEqual({
                     periodType: 'DAILY',
                     id: '20251124',
                     iso: '20251124',
@@ -1192,23 +1301,29 @@ describe('DAILY  relative periods', () => {
         })
     })
     describe('periods for the period last 90 days', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_90_DAYS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_90_DAYS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 90 days', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(90)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_90_DAYS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(90)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_90_DAYS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'DAILY',
                     id: 'LAST_90_DAYS',
                     displayName: 'Last 90 days',
                 })
-                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[0]).toEqual({
                     periodType: 'DAILY',
                     id: '20250827',
                     iso: '20250827',
@@ -1217,7 +1332,7 @@ describe('DAILY  relative periods', () => {
                     startDate: '2025-08-27',
                     endDate: '2025-08-27',
                 })
-                expect(selectedPeriod.fixedPeriods[89]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[89]).toEqual({
                     periodType: 'DAILY',
                     id: '20251124',
                     iso: '20251124',
@@ -1230,23 +1345,29 @@ describe('DAILY  relative periods', () => {
         })
     })
     describe('periods for the period last 180 days', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_180_DAYS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_180_DAYS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 180 days', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(180)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_180_DAYS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(180)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_180_DAYS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'DAILY',
                     id: 'LAST_180_DAYS',
                     displayName: 'Last 180 days',
                 })
-                expect(selectedPeriod.fixedPeriods[0]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[0]).toEqual({
                     periodType: 'DAILY',
                     id: '20250529',
                     iso: '20250529',
@@ -1255,7 +1376,7 @@ describe('DAILY  relative periods', () => {
                     startDate: '2025-05-29',
                     endDate: '2025-05-29',
                 })
-                expect(selectedPeriod.fixedPeriods[179]).toEqual({
+                expect(selectedPeriod.fixedPeriods?.[179]).toEqual({
                     periodType: 'DAILY',
                     id: '20251124',
                     iso: '20251124',
@@ -1270,9 +1391,15 @@ describe('DAILY  relative periods', () => {
 })
 
 describe('QUARTERLY relative periods', () => {
-    const periods = generateRelativePeriods({
-        periodType: 'QUARTERLY',
-        referenceDate: referenceDate.toString(),
+    let periods: RelativePeriod[] = []
+    beforeEach(() => {
+        // November 25, 2025
+        jest.spyOn(Date, 'now').mockReturnValue(1764028800000)
+        periods = generateRelativePeriods({
+            periodType: 'QUARTERLY',
+            includeFixedPeriods: true,
+            calendar: 'gregory',
+        })
     })
 
     it('should generate correct number of periods', () => {
@@ -1331,16 +1458,22 @@ describe('QUARTERLY relative periods', () => {
     })
 
     describe('periods for the period last 4 quarters', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_4_QUARTERS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_4_QUARTERS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 4 quarters', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_4_QUARTERS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(4)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_4_QUARTERS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'QUARTERLY',
@@ -1391,16 +1524,22 @@ describe('QUARTERLY relative periods', () => {
     })
 
     describe('periods for quarters this year', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'QUARTERS_THIS_YEAR'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'QUARTERS_THIS_YEAR'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 4 quarters', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(4)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'QUARTERS_THIS_YEAR'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(4)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'QUARTERS_THIS_YEAR'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'QUARTERLY',
@@ -1452,9 +1591,15 @@ describe('QUARTERLY relative periods', () => {
 })
 
 describe('SIXMONTHLY relative periods', () => {
-    const periods = generateRelativePeriods({
-        periodType: 'SIXMONTHLY',
-        referenceDate: referenceDate.toString(),
+    let periods: RelativePeriod[] = []
+    beforeEach(() => {
+        // November 25, 2025
+        jest.spyOn(Date, 'now').mockReturnValue(1764028800000)
+        periods = generateRelativePeriods({
+            periodType: 'SIXMONTHLY',
+            includeFixedPeriods: true,
+            calendar: 'gregory',
+        })
     })
 
     it('should generate correct number of periods', () => {
@@ -1513,16 +1658,22 @@ describe('SIXMONTHLY relative periods', () => {
     })
 
     describe('periods for the period last 2 six-month', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_2_SIXMONTHS'
-        )
         it('should be defined', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_2_SIXMONTHS'
+            )
             expect(selectedPeriod).toBeDefined()
         })
         it('should generate 2 six-months', () => {
-            expect(selectedPeriod?.fixedPeriods.length).toEqual(2)
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_2_SIXMONTHS'
+            )
+            expect(selectedPeriod?.fixedPeriods?.length).toEqual(2)
         })
         it('should generate correct period', () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_2_SIXMONTHS'
+            )
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     periodType: 'SIXMONTHLY',
@@ -1556,9 +1707,15 @@ describe('SIXMONTHLY relative periods', () => {
 })
 
 describe('YEARLY relative periods', () => {
-    const periods = generateRelativePeriods({
-        periodType: 'YEARLY',
-        referenceDate: referenceDate.toString(),
+    let periods: RelativePeriod[] = []
+    beforeEach(() => {
+        // November 25, 2025
+        jest.spyOn(Date, 'now').mockReturnValue(1764028800000)
+        periods = generateRelativePeriods({
+            periodType: 'YEARLY',
+            includeFixedPeriods: true,
+            calendar: 'gregory',
+        })
     })
     it('should generate correct number of periods', () => {
         expect(periods.length).toEqual(4)
@@ -1610,26 +1767,34 @@ describe('YEARLY relative periods', () => {
         }
     })
     describe('periods for the period last 5 years', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_5_YEARS'
-        )
-        it(`should be defined`, () => expect(selectedPeriod).toBeDefined())
+        it(`should be defined`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_5_YEARS'
+            )
+            expect(selectedPeriod).toBeDefined()
+        })
         it(`should generate 5 years`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_5_YEARS'
+            )
             expect(selectedPeriod?.fixedPeriods?.length).toEqual(5)
         })
         it(`should generate correct period`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_5_YEARS'
+            )
             expect(selectedPeriod).toBeDefined()
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     id: 'LAST_5_YEARS',
                     name: 'Last 5 years',
                 })
-                expect(selectedPeriod.fixedPeriods[0]).toMatchObject({
+                expect(selectedPeriod.fixedPeriods?.[0]).toMatchObject({
                     id: '2020',
                     startDate: '2020-01-01',
                     endDate: '2020-12-31',
                 })
-                expect(selectedPeriod.fixedPeriods[4]).toMatchObject({
+                expect(selectedPeriod.fixedPeriods?.[4]).toMatchObject({
                     id: '2024',
                     startDate: '2024-01-01',
                     endDate: '2024-12-31',
@@ -1640,9 +1805,15 @@ describe('YEARLY relative periods', () => {
 })
 
 describe('FINANCIAL YEAR relative periods', () => {
-    const periods = generateRelativePeriods({
-        periodType: 'FINANCIAL',
-        referenceDate: referenceDate.toString(),
+    let periods: RelativePeriod[] = []
+    beforeEach(() => {
+        // November 25, 2025
+        jest.spyOn(Date, 'now').mockReturnValue(1764028800000)
+        periods = generateRelativePeriods({
+            periodType: 'FINANCIAL',
+            includeFixedPeriods: true,
+            calendar: 'gregory',
+        })
     })
     it('should generate correct number of periods', () => {
         expect(periods.length).toEqual(3)
@@ -1697,26 +1868,34 @@ describe('FINANCIAL YEAR relative periods', () => {
     })
 
     describe('periods for the period last 5 financial years', () => {
-        const selectedPeriod = periods.find(
-            (period) => period.id === 'LAST_5_FINANCIAL_YEARS'
-        )
-        it(`should be defined`, () => expect(selectedPeriod).toBeDefined())
+        it(`should be defined`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_5_FINANCIAL_YEARS'
+            )
+            expect(selectedPeriod).toBeDefined()
+        })
         it(`should generate 5 financial years`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_5_FINANCIAL_YEARS'
+            )
             expect(selectedPeriod?.fixedPeriods?.length).toEqual(5)
         })
         it(`should generate correct period`, () => {
+            const selectedPeriod = periods.find(
+                (period) => period.id === 'LAST_5_FINANCIAL_YEARS'
+            )
             expect(selectedPeriod).toBeDefined()
             if (selectedPeriod) {
                 expect(selectedPeriod).toMatchObject({
                     id: 'LAST_5_FINANCIAL_YEARS',
                     name: 'Last 5 financial years',
                 })
-                expect(selectedPeriod.fixedPeriods[0]).toMatchObject({
+                expect(selectedPeriod.fixedPeriods?.[0]).toMatchObject({
                     id: '2020Oct',
                     startDate: '2020-10-01',
                     endDate: '2021-09-30',
                 })
-                expect(selectedPeriod.fixedPeriods[4]).toMatchObject({
+                expect(selectedPeriod.fixedPeriods?.[4]).toMatchObject({
                     id: '2024Oct',
                     startDate: '2024-10-01',
                     endDate: '2025-09-30',

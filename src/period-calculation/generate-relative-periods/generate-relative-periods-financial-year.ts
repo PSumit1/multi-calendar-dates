@@ -9,13 +9,25 @@ import PlainDate = Temporal.PlainDate
 type GenerateRelativePeriodsFinancialYear = (options: {
     referenceDate: ZonedDateTime | PlainDate
     calendar: SupportedCalendar
+    includeFixedPeriods: boolean
 }) => Array<RelativePeriod>
 
 const generateRelativePeriodsFinancialYear: GenerateRelativePeriodsFinancialYear =
-    ({ referenceDate, calendar }) => {
+    ({ referenceDate, calendar, includeFixedPeriods }) => {
         /*
          * The financial year is set to Financial year October as how the analytics API treats it.
          * */
+        if (!includeFixedPeriods) {
+            return getFinancialYearsPeriodType().map(
+                (periodTypeConfig) =>
+                    ({
+                        name: periodTypeConfig.name,
+                        id: periodTypeConfig.id,
+                        periodType: 'FINANCIAL' as const,
+                        displayName: periodTypeConfig.name,
+                    } as RelativePeriod)
+            )
+        }
         return getFinancialYearsPeriodType().map((periodTypeConfig) => {
             if (periodTypeConfig.thisYear) {
                 return {

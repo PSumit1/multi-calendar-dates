@@ -9,12 +9,25 @@ import PlainDate = Temporal.PlainDate
 type GenerateRelativePeriodsBiWeekly = (options: {
     referenceDate: ZonedDateTime | PlainDate
     calendar: SupportedCalendar
+    includeFixedPeriods: boolean
 }) => Array<RelativePeriod>
 
 const generateRelativePeriodsBiWeekly: GenerateRelativePeriodsBiWeekly = ({
     referenceDate,
     calendar,
+    includeFixedPeriods = false,
 }) => {
+    if (!includeFixedPeriods) {
+        return getBiWeeksPeriodType().map(
+            (periodTypeConfig) =>
+                ({
+                    name: periodTypeConfig.name,
+                    id: periodTypeConfig.id,
+                    periodType: 'BIWEEKLY' as const,
+                    displayName: periodTypeConfig.name,
+                } as RelativePeriod)
+        )
+    }
     return getBiWeeksPeriodType().map((periodTypeConfig) => {
         const fixedPeriods: Array<FixedPeriod> = []
         if (periodTypeConfig.thisYear) {

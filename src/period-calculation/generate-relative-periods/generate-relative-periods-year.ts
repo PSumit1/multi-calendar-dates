@@ -9,12 +9,26 @@ import PlainDate = Temporal.PlainDate
 type GenerateRelativePeriodsYear = (options: {
     referenceDate: ZonedDateTime | PlainDate
     calendar: SupportedCalendar
+    includeFixedPeriods: boolean
 }) => Array<RelativePeriod>
 
 const generateRelativePeriodsYear: GenerateRelativePeriodsYear = ({
     referenceDate,
     calendar,
+    includeFixedPeriods = false,
 }) => {
+    if (!includeFixedPeriods) {
+        return getYearsPeriodType().map(
+            (periodTypeConfig) =>
+                ({
+                    name: periodTypeConfig.name,
+                    id: periodTypeConfig.id,
+                    periodType: 'YEARLY' as const,
+                    displayName: periodTypeConfig.name,
+                } as RelativePeriod)
+        )
+    }
+
     return getYearsPeriodType().map((periodTypeConfig) => {
         if (periodTypeConfig.thisYear) {
             return {

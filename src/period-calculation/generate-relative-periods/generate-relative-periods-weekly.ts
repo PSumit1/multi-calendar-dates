@@ -9,12 +9,23 @@ import PlainDate = Temporal.PlainDate
 type GenerateRelativePeriodsWeekly = (options: {
     referenceDate: ZonedDateTime | PlainDate
     calendar: SupportedCalendar
+    includeFixedPeriods: boolean
 }) => Array<RelativePeriod>
 
 const generateRelativePeriodsWeekly: GenerateRelativePeriodsWeekly = ({
     referenceDate,
     calendar,
+    includeFixedPeriods = false,
 }) => {
+    if (!includeFixedPeriods) {
+        return getWeeksPeriodType().map((periodTypeConfig) => ({
+            name: periodTypeConfig.name,
+            id: periodTypeConfig.id,
+            periodType: 'WEEKLY' as const,
+            displayName: periodTypeConfig.name,
+        }))
+    }
+
     return getWeeksPeriodType().map((periodTypeConfig) => {
         const fixedPeriods: Array<FixedPeriod> = []
         if (periodTypeConfig.thisYear) {

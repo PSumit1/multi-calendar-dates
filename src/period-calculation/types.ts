@@ -18,5 +18,5 @@ export type RelativePeriod = {
     name: string
     displayName: string
     id: string
-    fixedPeriods: Array<FixedPeriod>
+    fixedPeriods?: FixedPeriod[]
 }

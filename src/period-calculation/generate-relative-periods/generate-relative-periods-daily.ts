@@ -9,12 +9,25 @@ import PlainDate = Temporal.PlainDate
 type GenerateRelativePeriodsDaily = (options: {
     referenceDate: ZonedDateTime | PlainDate
     calendar: SupportedCalendar
+    includeFixedPeriods: boolean
 }) => Array<RelativePeriod>
 
 const generateRelativePeriodsDaily: GenerateRelativePeriodsDaily = ({
     referenceDate,
     calendar,
+    includeFixedPeriods = false,
 }) => {
+    if (!includeFixedPeriods) {
+        return getDaysPeriodType().map(
+            (periodTypeConfig) =>
+                ({
+                    name: periodTypeConfig.name,
+                    id: periodTypeConfig.id,
+                    periodType: 'DAILY' as const,
+                    displayName: periodTypeConfig.name,
+                } as RelativePeriod)
+        )
+    }
     return getDaysPeriodType().map((periodTypeConfig) => {
         const fixedPeriods: Array<FixedPeriod> = []
         if (periodTypeConfig.thisYear) {
@@ -28,7 +41,9 @@ const generateRelativePeriodsDaily: GenerateRelativePeriodsDaily = ({
                     .add({ days: item })
                     .toPlainDateTime()
                     .toPlainDate()
-                    .toString()
+                    .toString({
+                        calendarName: 'never',
+                    })
                 fixedPeriods.push(
                     getFixedPeriodByDate({
                         periodType: 'DAILY',
@@ -45,7 +60,9 @@ const generateRelativePeriodsDaily: GenerateRelativePeriodsDaily = ({
                     })
                     .toPlainDateTime()
                     .toPlainDate()
-                    .toString()
+                    .toString({
+                        calendarName: 'never',
+                    })
                 fixedPeriods.push(
                     getFixedPeriodByDate({
                         periodType: 'DAILY',

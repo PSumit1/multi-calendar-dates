@@ -16,12 +16,14 @@ type GenerateRelativePeriods = (options: {
     periodType: RelativePeriodType
     referenceDate?: string
     calendar?: SupportedCalendar
+    includeFixedPeriods?: boolean
 }) => Array<RelativePeriod>
 
 const generateRelativePeriods: GenerateRelativePeriods = ({
     periodType,
     referenceDate, // string or Temporal?
     calendar,
+    includeFixedPeriods = false,
 }) => {
     const date = referenceDate
         ? Temporal.PlainDate.from(referenceDate)
@@ -31,54 +33,63 @@ const generateRelativePeriods: GenerateRelativePeriods = ({
         return generateRelativePeriodsMonthly({
             referenceDate: date,
             calendar: calendar ?? 'iso8601',
+            includeFixedPeriods,
         })
     }
     if (periodType === 'BIMONTHLY') {
         return generateRelativePeriodsBiMonthly({
             referenceDate: date,
             calendar: calendar ?? 'iso8601',
+            includeFixedPeriods,
         })
     }
     if (periodType === 'WEEKLY') {
         return generateRelativePeriodsWeekly({
             referenceDate: date,
             calendar: calendar ?? 'iso8601',
+            includeFixedPeriods,
         })
     }
     if (periodType === 'BIWEEKLY') {
         return generateRelativePeriodsBiWeekly({
             referenceDate: date,
             calendar: calendar ?? 'iso8601',
+            includeFixedPeriods,
         })
     }
     if (periodType === 'DAILY') {
         return generateRelativePeriodsDaily({
             referenceDate: date,
             calendar: calendar ?? 'iso8601',
+            includeFixedPeriods,
         })
     }
     if (periodType === 'QUARTERLY') {
         return generateRelativePeriodsQuarterly({
             referenceDate: date,
             calendar: calendar ?? 'iso8601',
+            includeFixedPeriods,
         })
     }
     if (periodType === 'SIXMONTHLY') {
         return generateRelativePeriodsSixMonthly({
             referenceDate: date,
             calendar: calendar ?? 'iso8601',
+            includeFixedPeriods,
         })
     }
     if (periodType === 'YEARLY') {
         return generateRelativePeriodsYear({
             referenceDate: date,
             calendar: calendar ?? 'iso8601',
+            includeFixedPeriods,
         })
     }
     if (periodType === 'FINANCIAL') {
         return generateRelativePeriodsFinancialYear({
             referenceDate: date,
             calendar: calendar ?? 'iso8601',
+            includeFixedPeriods,
         })
     }
 
